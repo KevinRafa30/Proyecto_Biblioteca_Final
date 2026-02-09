@@ -75,3 +75,20 @@ CREATE TABLE Prestamos_Devoluciones (
     idUsuario INT FOREIGN KEY REFERENCES Usuarios(idUsuario)
 );
 GO
+
+
+CREATE TABLE TiposBibliografia (
+    idTipoBibliografia INT PRIMARY KEY IDENTITY(1,1),
+    descripcion VARCHAR(100),
+    estado BIT
+);
+GO
+
+ALTER TABLE Libros
+ADD idTipoBibliografia INT;
+GO
+
+ALTER TABLE Libros
+ADD CONSTRAINT FK_Libros_TiposBibliografia
+FOREIGN KEY (idTipoBibliografia) REFERENCES TiposBibliografia(idTipoBibliografia);
+GO
