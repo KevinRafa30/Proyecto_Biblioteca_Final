@@ -92,3 +92,7 @@ ALTER TABLE Libros
 ADD CONSTRAINT FK_Libros_TiposBibliografia
 FOREIGN KEY (idTipoBibliografia) REFERENCES TiposBibliografia(idTipoBibliografia);
 GO
+
+ALTER TABLE Autores
+ADD apellido VARCHAR(100);
+GO
