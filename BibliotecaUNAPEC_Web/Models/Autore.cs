@@ -9,6 +9,8 @@ public partial class Autore
 
     public string? Nombre { get; set; }
 
+    public string? Apellido { get; set; }.
+
     public string? Nacionalidad { get; set; }
 
     public bool? Estado { get; set; }
