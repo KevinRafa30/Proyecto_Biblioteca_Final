@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Biblioteca_Unapec.Models;
 
-public partial class BibliotecaUnapecContext : DbContext
+public partial class BibliotecaUnapecContext : IdentityDbContext><IdentityUser>
 {
     public BibliotecaUnapecContext()
     {
@@ -38,6 +39,7 @@ public partial class BibliotecaUnapecContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Autore>(entity =>
         {
             entity.HasKey(e => e.IdAutor).HasName("PK__Autores__9AE8206ACAFEBAB2");
