@@ -19,15 +19,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
     options.Password.RequiredLength = 6;
 })
 
-    .AddRoles<IdentityRole>() // Agrega soporte para roles
-    .AddEntityFrameworkStores<BibliotecaUnapecContext>();
-
-
-
-
-
-
-
+.AddRoles<IdentityRole>() // Agrega soporte para roles
+.AddEntityFrameworkStores<BibliotecaUnapecContext>();
 
 
 // Add services to the container.
@@ -45,13 +38,21 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+
+
+
+
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+//Mapeo de paginas de razor para usar identity (login, registro)
+app.MapRazorPages();
 app.Run();
+
