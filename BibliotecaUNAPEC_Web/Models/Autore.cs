@@ -1,7 +1,8 @@
-﻿using System;
+﻿using BibliotecaUNAPEC_Web.Models;
+using System;
 using System.Collections.Generic;
 
-namespace BibliotecaUNAPEC_Web.Models;
+namespace Biblioteca_Unapec.Models;
 
 public partial class Autore
 {
@@ -9,7 +10,7 @@ public partial class Autore
 
     public string? Nombre { get; set; }
 
-    public string? Apellido { get; set; }.
+    public string? Apellido { get; set; }
 
     public string? Nacionalidad { get; set; }
 

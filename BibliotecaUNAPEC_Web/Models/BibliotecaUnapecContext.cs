@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Biblioteca_Unapec.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaUNAPEC_Web.Models;
