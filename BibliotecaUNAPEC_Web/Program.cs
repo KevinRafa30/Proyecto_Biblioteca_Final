@@ -4,6 +4,23 @@ using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+//Configuracion de la base de datos y el contexto de identidad
+builder.Services.AddDbContext<BibliotecaUnapecContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+?? "Server=(localdb)\\MSSQLLocalDB;Database=BibliotecaUNAPEC;Trusted_Connection=True;"));
+
+
+
+
+
+
+
+
+
+
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
