@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Biblioteca_Unapec.Models;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
