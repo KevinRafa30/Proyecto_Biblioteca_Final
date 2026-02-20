@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace Biblioteca_Unapec.Models;
 
 public partial class Autore
