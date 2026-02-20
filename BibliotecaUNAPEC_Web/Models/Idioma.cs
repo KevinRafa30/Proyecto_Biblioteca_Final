@@ -1,6 +1,6 @@
 ﻿
 
-namespace Biblioteca_Unapec.Models;
+namespace BibliotecaUNAPEC_Web.Models;
 
 public partial class Idioma
 {

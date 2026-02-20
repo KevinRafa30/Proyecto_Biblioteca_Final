@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 
-namespace Biblioteca_Unapec.Models;
+namespace BibliotecaUNAPEC_Web.Models;
 
-public partial class BibliotecaUnapecContext : IdentityDbContext><IdentityUser>
+public partial class BibliotecaUnapecContext : IdentityDbContext<IdentityUser>
 {
     public BibliotecaUnapecContext()
     {

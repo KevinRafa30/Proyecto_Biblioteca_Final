@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using Biblioteca_Unapec.Models;
+using BibliotecaUNAPEC_Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using BibliotecaUNAPEC_Web.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,8 +43,6 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-
 
 
 
