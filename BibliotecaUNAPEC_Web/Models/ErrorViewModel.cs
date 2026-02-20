@@ -1,4 +1,4 @@
-namespace BibliotecaUNAPEC_Web.Models
+namespace Biblioteca_Unapec.Models
 {
     public class ErrorViewModel
     {

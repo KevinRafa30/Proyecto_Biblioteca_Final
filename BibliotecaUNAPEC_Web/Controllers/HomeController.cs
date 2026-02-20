@@ -2,7 +2,7 @@ using System.Diagnostics;
 using BibliotecaUNAPEC_Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BibliotecaUNAPEC_Web.Controllers
+namespace Biblioteca_Unapec.Controllers
 {
     public class HomeController : Controller
     {

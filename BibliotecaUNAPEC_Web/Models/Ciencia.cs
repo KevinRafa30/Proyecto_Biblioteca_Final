@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BibliotecaUNAPEC_Web.Models;
+namespace Biblioteca_Unapec.Models;
 
 public partial class Ciencia
 {

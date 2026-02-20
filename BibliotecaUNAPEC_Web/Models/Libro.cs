@@ -1,8 +1,8 @@
-﻿using Biblioteca_Unapec.Models;
+﻿using BibliotecaUNAPEC_Web.Models;
 using System;
 using System.Collections.Generic;
 
-namespace BibliotecaUNAPEC_Web.Models;
+namespace Biblioteca_Unapec.Models;
 
 public partial class Libro
 {

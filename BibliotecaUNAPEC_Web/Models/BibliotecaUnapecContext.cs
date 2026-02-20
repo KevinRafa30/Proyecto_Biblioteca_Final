@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Biblioteca_Unapec.Models;
+using BibliotecaUNAPEC_Web.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BibliotecaUNAPEC_Web.Models;
+namespace Biblioteca_Unapec.Models;
 
 public partial class BibliotecaUnapecContext : DbContext
 {
