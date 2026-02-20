@@ -10,8 +10,17 @@ builder.Services.AddDbContext<BibliotecaUnapecContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
 ?? "Server=(localdb)\\MSSQLLocalDB;Database=BibliotecaUNAPEC;Trusted_Connection=True;"));
 
+//Configuración de Identity
 
 
+builder.Services.AddDefaultIdentity<IdentityUser>(options => {
+    options.SignIn.RequireConfirmedAccount = false; 
+    options.Password.RequireDigit = false;          
+    options.Password.RequiredLength = 6;
+})
+
+    .AddRoles<IdentityRole>() // Agrega soporte para roles
+    .AddEntityFrameworkStores<BibliotecaUnapecContext>();
 
 
 
