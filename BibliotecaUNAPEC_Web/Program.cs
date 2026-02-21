@@ -53,5 +53,39 @@ app.MapControllerRoute(
 
 //Mapeo de paginas de razor para usar identity (login, registro)
 app.MapRazorPages();
+
+
+
+//Manejo de roles con seeding
+// --- BLOQUE DE MANEJO DE ROLES ---
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+    //Definicion de roles
+    string[] roleNames = { "Admin", "Empleado", "Lector" };
+
+    foreach (var roleName in roleNames)
+    {
+        // Si el rol no existe en la tabla AspNetRoles
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
+    }
+
+    // Administrador por defecto para mostrar al profesor
+    var adminEmail = "admin@biblioteca.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+    if (adminUser == null)
+    {
+        var user = new IdentityUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+        await userManager.CreateAsync(user, "Admin123!"); // Clave segura para el administrador
+        await userManager.AddToRoleAsync(user, "Admin"); // Usuario administrador agregado al rol Admin
+    }
+}
+
 app.Run();
 
