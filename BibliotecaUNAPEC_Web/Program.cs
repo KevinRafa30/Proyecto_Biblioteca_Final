@@ -58,7 +58,7 @@ app.MapRazorPages();
 
 //Manejo de roles con seeding
 // --- BLOQUE DE MANEJO DE ROLES ---
-using (var scope = app.Services.CreateScope())
+/*using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
@@ -75,7 +75,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 
-    // Administrador por defecto para mostrar al profesor
+    // Administrador por defecto 
     var adminEmail = "admin@biblioteca.com";
     var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
@@ -86,6 +86,7 @@ using (var scope = app.Services.CreateScope())
         await userManager.AddToRoleAsync(user, "Admin"); // Usuario administrador agregado al rol Admin
     }
 }
+*/
 
 app.Run();
 
