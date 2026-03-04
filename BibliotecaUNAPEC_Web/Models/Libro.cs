@@ -6,6 +6,9 @@ public partial class Libro
 {
     public int IdLibro { get; set; }
 
+
+    [Required(ErrorMessage = "El título es obligatorio")] 
+    [StringLength(200)]
     public string? Titulo { get; set; }
 
     public string? Isbn { get; set; }
