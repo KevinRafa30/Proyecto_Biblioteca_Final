@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaUNAPEC_Web.Controllers
 {
+    [Authorize]
     public class LibrosController : Controller
     {
         public IActionResult Index()
