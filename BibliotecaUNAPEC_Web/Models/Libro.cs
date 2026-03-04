@@ -21,8 +21,9 @@ public partial class Libro
     [RegularExpression(@"^\d{4}$", ErrorMessage = "El año debe ser de 4 dígitos")] 
     public string? AnioPublicacion { get; set; }
 
-    public bool? Estado { get; set; }
+    public bool? Estado { get; set; } = true;
 
+    [Required(ErrorMessage = "Debe seleccionar un autor")]
     public int? IdAutor { get; set; }
 
     public int? IdEditorial { get; set; }
