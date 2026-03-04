@@ -16,6 +16,9 @@ public partial class Libro
     [StringLength(20, ErrorMessage = "El ISBN no puede exceder los 20 caracteres")]
     public string? Isbn { get; set; } = null!;
 
+    [Display(Name = "Año de Publicación")]
+    [cite_start]
+    [RegularExpression(@"^\d{4}$", ErrorMessage = "El año debe ser de 4 dígitos")] 
     public string? AnioPublicacion { get; set; }
 
     public bool? Estado { get; set; }
