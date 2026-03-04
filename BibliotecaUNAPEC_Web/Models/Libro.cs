@@ -17,7 +17,6 @@ public partial class Libro
     public string? Isbn { get; set; } = null!;
 
     [Display(Name = "Año de Publicación")]
-    [cite_start]
     [RegularExpression(@"^\d{4}$", ErrorMessage = "El año debe ser de 4 dígitos")] 
     public string? AnioPublicacion { get; set; }
 
