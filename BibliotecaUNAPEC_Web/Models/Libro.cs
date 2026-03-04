@@ -4,6 +4,7 @@ namespace BibliotecaUNAPEC_Web.Models;
 
 public partial class Libro
 {
+    [Key]
     public int IdLibro { get; set; }
 
 
