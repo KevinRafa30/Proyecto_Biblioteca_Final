@@ -12,7 +12,9 @@ public partial class Libro
     [StringLength(200)]
     public string? Titulo { get; set; }
 
-    public string? Isbn { get; set; }
+    [Required(ErrorMessage = "El ISBN es requerido")]
+    [StringLength(20, ErrorMessage = "El ISBN no puede exceder los 20 caracteres")]
+    public string? Isbn { get; set; } = null!;
 
     public string? AnioPublicacion { get; set; }
 
