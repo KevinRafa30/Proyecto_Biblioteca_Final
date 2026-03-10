@@ -1,26 +1,20 @@
-﻿using BibliotecaUNAPEC_Web.Models; 
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using BibliotecaUNAPEC_Web.Models;
 
 namespace BibliotecaUNAPEC_Web.Controllers
 {
     [Authorize]
-    public class LibrosController : Controller
+    public class LibrosController(BibliotecaUnapecContext context) : Controller
     {
+        private readonly BibliotecaUnapecContext _context = context;
 
-        private readonly BibliotecaUnapecContext _context;
-
-        //Inyeccion en la base de datos
-        public LibrosController(BibliotecaUnapecContext context)
-        {
-            _context = context;
-        }
-
+        // Lista de libros
         public async Task<IActionResult> Index()
         {
-            //Todas las relaciones para que en la tabla se vea el nombre de la editorial, ciencia
+            
             var libros = await _context.Libros
                 .Include(l => l.IdAutorNavigation)
                 .Include(l => l.IdEditorialNavigation)
@@ -33,10 +27,9 @@ namespace BibliotecaUNAPEC_Web.Controllers
         }
 
         // GET REQUEST: Libros/Create
-        //Lista de libros
         public IActionResult Create()
         {
-            //SelectList para que aparezcan en los dropdowns de la vista
+            // SelectList para que aparezcan en los dropdowns de la vista (solo activos)
             ViewData["IdAutor"] = new SelectList(_context.Autores.Where(x => x.Estado == true), "IdAutor", "Nombre");
             ViewData["IdEditorial"] = new SelectList(_context.Editoriales.Where(x => x.Estado == true), "IdEditorial", "Nombre");
             ViewData["IdCiencia"] = new SelectList(_context.Ciencias.Where(x => x.Estado == true), "IdCiencia", "Descripcion");
@@ -46,12 +39,13 @@ namespace BibliotecaUNAPEC_Web.Controllers
             return View();
         }
 
-        //POST 
+        // POST REQUEST
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        //Bind para incluir TODOS los campos nuevos de tu base de datos
+        [ValidateAntiForgeryToken] // Para ataques de suplantación de identidad (CSRF)
+        // Bind para incluir TODOS los campos nuevos de la base de datos y prevenir ataques de sobrepublicación (over-posting)
         public async Task<IActionResult> Create([Bind("IdLibro,Titulo,Isbn,AnioPublicacion,Estado,IdAutor,IdEditorial,IdCiencia,IdIdioma,IdTipoBibliografia")] Libro libro)
         {
+            // Revisando que el modelo sea válido según DataAnnotations antes de guardar.
             if (ModelState.IsValid)
             {
                 _context.Add(libro);
@@ -59,7 +53,7 @@ namespace BibliotecaUNAPEC_Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si hay un error, debemos recargar las listas para que la vista no falle
+            // Si hay un error , recargar las listas para que la vista no falle y mostrar los errores
             ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "Nombre", libro.IdAutor);
             ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
             ViewData["IdCiencia"] = new SelectList(_context.Ciencias, "IdCiencia", "Descripcion", libro.IdCiencia);
@@ -67,8 +61,75 @@ namespace BibliotecaUNAPEC_Web.Controllers
             ViewData["IdTipoBibliografia"] = new SelectList(_context.TiposBibliografia, "IdTipoBibliografia", "Descripcion", libro.IdTipoBibliografia);
 
             return View(libro);
-
         }
 
+        // GET REQUEST: Libros/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var libro = await _context.Libros.FindAsync(id);
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "Nombre", libro.IdAutor);
+            ViewData["IdCiencia"] = new SelectList(_context.Ciencias, "IdCiencia", "Descripcion", libro.IdCiencia);
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
+            ViewData["IdIdioma"] = new SelectList(_context.Idiomas, "IdIdioma", "Descripcion", libro.IdIdioma);
+            ViewData["IdTipoBibliografia"] = new SelectList(_context.TiposBibliografia, "IdTipoBibliografia", "Descripcion", libro.IdTipoBibliografia);
+
+            return View(libro);
+        }
+
+        // POST REQUEST: Libros/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("IdLibro,Titulo,Isbn,AnioPublicacion,Estado,IdAutor,IdEditorial,IdCiencia,IdIdioma,IdTipoBibliografia")] Libro libro)
+        {
+            if (id != libro.IdLibro)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(libro);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!LibroExists(libro.IdLibro))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Si falla el edit, también recargamos las listas antes de devolver la vista
+            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "Nombre", libro.IdAutor);
+            ViewData["IdCiencia"] = new SelectList(_context.Ciencias, "IdCiencia", "Descripcion", libro.IdCiencia);
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
+            ViewData["IdIdioma"] = new SelectList(_context.Idiomas, "IdIdioma", "Descripcion", libro.IdIdioma);
+            ViewData["IdTipoBibliografia"] = new SelectList(_context.TiposBibliografia, "IdTipoBibliografia", "Descripcion", libro.IdTipoBibliografia);
+
+            return View(libro);
+        }
+
+        private bool LibroExists(int id)
+        {
+            return _context.Libros.Any(e => e.IdLibro == id);
+        }
     }
 }
