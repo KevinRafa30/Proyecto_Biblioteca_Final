@@ -1,28 +1,28 @@
-﻿using System.ComponentModel.DataAnnotations;
-namespace BibliotecaUNAPEC_Web.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
+namespace BibliotecaUNAPEC_Web.Models;
 
 public partial class Libro
 {
     [Key]
     public int IdLibro { get; set; }
 
-
-    [Required(ErrorMessage = "El título es obligatorio")] 
+    [Required(ErrorMessage = "El título es obligatorio")]
     [StringLength(200)]
     public string? Titulo { get; set; }
 
     [Required(ErrorMessage = "El ISBN es requerido")]
     [StringLength(20, ErrorMessage = "El ISBN no puede exceder los 20 caracteres")]
-    public string? Isbn { get; set; } = null!;
+    public string? Isbn { get; set; }
 
     [Display(Name = "Año de Publicación")]
-    [RegularExpression(@"^\d{4}$", ErrorMessage = "El año debe ser de 4 dígitos")] 
+    [RegularExpression(@"^\d{4}$", ErrorMessage = "El año debe ser de 4 dígitos")]
     public string? AnioPublicacion { get; set; }
 
-    public bool? Estado { get; set; } = true;
+    public bool? Estado { get; set; }
 
-    [Required(ErrorMessage = "Debe seleccionar un autor")]
     public int? IdAutor { get; set; }
 
     public int? IdEditorial { get; set; }
@@ -31,6 +31,8 @@ public partial class Libro
 
     public int? IdIdioma { get; set; }
 
+    public int? IdTipoBibliografia { get; set; }
+
     public virtual Autore? IdAutorNavigation { get; set; }
 
     public virtual Ciencia? IdCienciaNavigation { get; set; }
@@ -38,6 +40,8 @@ public partial class Libro
     public virtual Editoriale? IdEditorialNavigation { get; set; }
 
     public virtual Idioma? IdIdiomaNavigation { get; set; }
+
+    public virtual TiposBibliografium? IdTipoBibliografiaNavigation { get; set; }
 
     public virtual ICollection<PrestamosDevolucione> PrestamosDevoluciones { get; set; } = new List<PrestamosDevolucione>();
 }

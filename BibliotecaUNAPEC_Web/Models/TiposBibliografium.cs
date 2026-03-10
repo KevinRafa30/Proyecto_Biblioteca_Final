@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace BibliotecaUNAPEC_Web.Models;
 
-public partial class Editoriale
+public partial class TiposBibliografium
 {
-    public int IdEditorial { get; set; }
+    public int IdTipoBibliografia { get; set; }
 
-    public string? Nombre { get; set; }
-
-    public string? Pais { get; set; }
+    public string? Descripcion { get; set; }
 
     public bool? Estado { get; set; }
 
