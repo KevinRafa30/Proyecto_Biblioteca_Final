@@ -58,7 +58,7 @@ app.MapRazorPages();
 
 //Manejo de roles con seeding
 // --- BLOQUE DE MANEJO DE ROLES ---
-/*using (var scope = app.Services.CreateScope())
+using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
@@ -86,7 +86,7 @@ app.MapRazorPages();
         await userManager.AddToRoleAsync(user, "Admin"); // Usuario administrador agregado al rol Admin
     }
 }
-*/
+
 
 app.Run();
 
