@@ -42,6 +42,7 @@ public partial class BibliotecaUnapecContext : IdentityDbContext<IdentityUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Autore>(entity =>
         {
             entity.HasKey(e => e.IdAutor).HasName("PK__Autores__9AE8206A6D278F2F");
