@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BibliotecaUNAPEC_Web.Models; 
 using Microsoft.AspNetCore.Authorization;
-using BibliotecaUNAPEC_Web.Models; 
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaUNAPEC_Web.Controllers
@@ -11,50 +12,63 @@ namespace BibliotecaUNAPEC_Web.Controllers
 
         private readonly BibliotecaUnapecContext _context;
 
-        //inyeccion de la base de datos
+        //Inyeccion en la base de datos
         public LibrosController(BibliotecaUnapecContext context)
         {
             _context = context;
         }
 
-        //formulario para nuevo libro
-        //get /Libros/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken] // Para ataques de suplantación de identidad (CSRF)
-        public async Task<IActionResult> Create([Bind("IdLibro,Titulo,Isbn,AnioPublicacion,IdAutor")] Libro libro) //El Bind es para especificar qué propiedades del modelo se deben enlazar desde el formulario,
-                                                                                                                   //lo que ayuda a prevenir ataques de sobrepublicación (over-posting) al limitar
-                                                                                                                   //los campos que pueden ser modificados por el usuario.
-                                                                                                         
-        {
-            
-            // Revisando que el ISBN y Título no estén vacíos antes de guardar.
-            if (ModelState.IsValid)
-            {
-                _context.Add(libro);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index)); // Hay que hacer index
-            }
-
-            // En caso de un fallo, volver a la vista para mostrar los errores
-            return View(libro);
-        }
-
         public async Task<IActionResult> Index()
         {
-            // Lista de libros con sus autores incluidos
+            //Todas las relaciones para que en la tabla se vea el nombre de la editorial, ciencia
             var libros = await _context.Libros
                 .Include(l => l.IdAutorNavigation)
+                .Include(l => l.IdEditorialNavigation)
+                .Include(l => l.IdCienciaNavigation)
+                .Include(l => l.IdIdiomaNavigation)
+                .Include(l => l.IdTipoBibliografiaNavigation)
                 .ToListAsync();
 
             return View(libros);
         }
 
- 
-     
+        // GET REQUEST: Libros/Create
+        //Lista de libros
+        public IActionResult Create()
+        {
+            //SelectList para que aparezcan en los dropdowns de la vista
+            ViewData["IdAutor"] = new SelectList(_context.Autores.Where(x => x.Estado == true), "IdAutor", "Nombre");
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales.Where(x => x.Estado == true), "IdEditorial", "Nombre");
+            ViewData["IdCiencia"] = new SelectList(_context.Ciencias.Where(x => x.Estado == true), "IdCiencia", "Descripcion");
+            ViewData["IdIdioma"] = new SelectList(_context.Idiomas.Where(x => x.Estado == true), "IdIdioma", "Descripcion");
+            ViewData["IdTipoBibliografia"] = new SelectList(_context.TiposBibliografia.Where(x => x.Estado == true), "IdTipoBibliografia", "Descripcion");
+
+            return View();
+        }
+
+        //POST 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        //Bind para incluir TODOS los campos nuevos de tu base de datos
+        public async Task<IActionResult> Create([Bind("IdLibro,Titulo,Isbn,AnioPublicacion,Estado,IdAutor,IdEditorial,IdCiencia,IdIdioma,IdTipoBibliografia")] Libro libro)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(libro);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Si hay un error, debemos recargar las listas para que la vista no falle
+            ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "Nombre", libro.IdAutor);
+            ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
+            ViewData["IdCiencia"] = new SelectList(_context.Ciencias, "IdCiencia", "Descripcion", libro.IdCiencia);
+            ViewData["IdIdioma"] = new SelectList(_context.Idiomas, "IdIdioma", "Descripcion", libro.IdIdioma);
+            ViewData["IdTipoBibliografia"] = new SelectList(_context.TiposBibliografia, "IdTipoBibliografia", "Descripcion", libro.IdTipoBibliografia);
+
+            return View(libro);
+
+        }
+
     }
 }
