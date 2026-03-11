@@ -1,70 +1,76 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@{
     ViewData["Title"] = "Inicio";
 }
 
 <div class="container mt-5">
-    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm border">
-        <div class="container-fluid py-2">
-            <h1 class="display-5 fw-bold text-primary mb-3">Sistema de Gestión Bibliotecaria UNAPEC</h1>
+    <div class="border rounded-3 shadow-sm bg-white p-5">
+        <h1 class="text-primary fw-bold mb-4">Sistema de Gestión Bibliotecaria UNAPEC</h1>
 
-            @if (!User.Identity.IsAuthenticated)
-            {
-                <p class="fs-4 text-muted">
-                    Bienvenido al portal central de la biblioteca. Este sistema permite la administración eficiente del catálogo bibliográfico y el control de los procesos de préstamos y devoluciones. Inicie sesión para acceder a las funcionalidades correspondientes a su nivel de acceso.
-                </p>
-                <div class="mt-4">
-                    <a class="btn btn-primary btn-lg px-4" href="/Identity/Account/Login">Iniciar Sesión</a>
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="row">
+                <div class="col-md-9">
+                    <p class="fs-5 text-dark">
+                        Bienvenido al portal central de la biblioteca. Este sistema permite la administración eficiente del catálogo bibliográfico y el control de los procesos de préstamos y devoluciones.
+                    </p>
+                    <p class="text-secondary">
+                        Inicie sesión para acceder a las funcionalidades correspondientes a su nivel de acceso.
+                    </p>
+                    <div class="mt-4">
+                        <a class="btn btn-primary px-4 shadow-none" href="/Identity/Account/Login">Iniciar Sesión</a>
+                    </div>
                 </div>
-            }
-            else
-            {
-                <p class="fs-4 text-muted">
-                    Sesión iniciada. A continuación, se detallan las funcionalidades y módulos a los que tiene acceso según su perfil:
-                </p>
+            </div>
+        }
+        else
+        {
+            <p class="fs-5 text-dark mb-4">
+                Sesión iniciada. A continuación, se detallan las funcionalidades y módulos a los que tiene acceso según su perfil:
+            </p>
 
-                <div class="row mt-5">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border shadow-none">
+                        <div class="card-header bg-light border-bottom fw-bold text-dark">
+                            Servicios de Biblioteca y Catálogo
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text text-secondary mb-3">Funcionalidades operativas disponibles:</p>
+                            <ul class="text-dark">
+                                <li>Consultar el catálogo general de libros, revistas, tesis y otros materiales.</li>
+                                <li>Verificar la disponibilidad del inventario bibliográfico en tiempo real.</li>
+                                <li>Procesar operaciones de consulta vinculadas a los recursos físicos de la institución.</li>
+                            </ul>
+                            <a class="btn btn-sm btn-outline-primary mt-3" asp-controller="Libros" asp-action="Index">Acceder al Catálogo</a>
+                        </div>
+                    </div>
+                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
                     <div class="col-md-6 mb-4">
-                        <div class="card h-100 border-secondary shadow-sm">
-                            <div class="card-header bg-secondary text-white fw-bold">
-                                Servicios de Biblioteca y Catálogo
+                        <div class="card h-100 border shadow-none">
+                            <div class="card-header bg-light border-bottom fw-bold text-dark">
+                                Administración del Sistema
                             </div>
-                            <div class="card-body d-flex flex-column">
-                                <p class="card-text">Funcionalidades operativas disponibles:</p>
-                                <ul>
-                                    <li>Consultar el catálogo general de libros, revistas, tesis y otros materiales.</li>
-                                    <li>Verificar la disponibilidad del inventario bibliográfico en tiempo real.</li>
-                                    <li>Procesar operaciones de consulta vinculadas a los recursos físicos de la institución.</li>
+                            <div class="card-body">
+                                <p class="card-text text-secondary mb-3">Nivel de acceso administrativo con control sobre:</p>
+                                <ul class="text-dark">
+                                    <li>Mantenimiento de bases de datos: registro de bibliografía, autores, editoriales, ciencias e idiomas.</li>
+                                    <li>Gestión de registros de personal (Empleados) y usuarios de la biblioteca.</li>
+                                    <li>Auditoría y control de todas las transacciones de préstamos y devoluciones.</li>
                                 </ul>
-                                <div class="mt-auto">
-                                    <a class="btn btn-outline-secondary" asp-controller="Libros" asp-action="Index">Acceder al Catálogo</a>
-                                </div>
+                                <a class="btn btn-sm btn-primary mt-3 shadow-none" asp-controller="PrestamosDevoluciones" asp-action="Index">Gestión de Préstamos</a>
                             </div>
                         </div>
                     </div>
+                }
+            </div>
 
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <div class="col-md-6 mb-4">
-                            <div class="card h-100 border-primary shadow-sm">
-                                <div class="card-header bg-primary text-white fw-bold">
-                                    Administración del Sistema
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <p class="card-text">Nivel de acceso administrativo que otorga control sobre:</p>
-                                    <ul>
-                                        <li>Mantenimiento de bases de datos: Registro y actualización de bibliografía, autores, editoriales, ciencias e idiomas.</li>
-                                        <li>Gestión de registros de personal (Empleados) y usuarios de la biblioteca.</li>
-                                        <li>Auditoría y control de todas las transacciones de préstamos y devoluciones.</li>
-                                    </ul>
-                                    <div class="mt-auto">
-                                        <a class="btn btn-outline-primary" asp-controller="PrestamosDevoluciones" asp-action="Index">Gestión de Préstamos</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-        </div>
+            <div class="mt-3 text-end">
+                <small class="text-muted">Usuario actual: @User.Identity.Name</small>
+            </div>
+        }
     </div>
 </div>
