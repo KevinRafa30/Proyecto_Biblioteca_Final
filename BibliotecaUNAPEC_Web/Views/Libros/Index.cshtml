@@ -1,83 +1,68 @@
 ﻿@model IEnumerable<BibliotecaUNAPEC_Web.Models.Libro>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Catálogo de Libros";
 }
 
-<h1>Index</h1>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary">Catálogo de Libros</h2>
+        <a asp-action="Create" class="btn btn-primary shadow-sm">Registrar Nuevo Libro</a>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Isbn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AnioPublicacion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdAutorNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdCienciaNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdEditorialNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdIdiomaNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdTipoBibliografiaNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Isbn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AnioPublicacion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdAutorNavigation.IdAutor)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdCienciaNavigation.IdCiencia)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdEditorialNavigation.IdEditorial)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdIdiomaNavigation.IdIdioma)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdTipoBibliografiaNavigation.IdTipoBibliografia)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.IdLibro">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdLibro">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdLibro">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Título</th>
+                            <th>ISBN</th>
+                            <th>Año</th>
+                            <th>Autor</th>
+                            <th>Editorial</th>
+                            <th>Ciencia</th>
+                            <th>Idioma</th>
+                            <th>Formato</th>
+                            <th>Estado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="align-middle fw-bold">@item.Titulo</td>
+                                <td class="align-middle">@item.Isbn</td>
+                                <td class="align-middle">@item.AnioPublicacion</td>
+
+                                <td class="align-middle">@item.IdAutorNavigation.Nombre</td>
+                                <td class="align-middle">@item.IdEditorialNavigation.Nombre</td>
+                                <td class="align-middle">@item.IdCienciaNavigation.Descripcion</td>
+                                <td class="align-middle">@item.IdIdiomaNavigation.Descripcion</td>
+                                <td class="align-middle">@item.IdTipoBibliografiaNavigation.Descripcion</td>
+
+                                <td class="align-middle">
+                                    @if (item.Estado == true)
+                                    {
+                                        <span class="badge bg-success py-2 px-3">Disponible</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger py-2 px-3">No Disponible</span>
+                                    }
+                                </td>
+                                <td class="align-middle text-center">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.IdLibro" class="btn btn-sm btn-outline-primary">Editar</a>
+                                        <a asp-action="Details" asp-route-id="@item.IdLibro" class="btn btn-sm btn-outline-secondary">Detalles</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

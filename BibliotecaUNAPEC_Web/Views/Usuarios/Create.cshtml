@@ -1,53 +1,80 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Usuario
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Registrar Usuario";
 }
 
-<h1>Create</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Registrar Nuevo Usuario</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+                        <h5 class="text-secondary mb-3">Datos Personales</h5>
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Nombre" class="control-label fw-bold">Nombre Completo</label>
+                                <input asp-for="Nombre" class="form-control" placeholder="Ej. Juan Pérez" />
+                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Cedula" class="control-label fw-bold">Cédula de Identidad</label>
+                                <input asp-for="Cedula" class="form-control" placeholder="Ej. 001-0000000-1" />
+                                <span asp-validation-for="Cedula" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="NoCarnet" class="control-label fw-bold">Número de Carnet</label>
+                                <input asp-for="NoCarnet" class="form-control" placeholder="Ej. 2026-0001" />
+                                <span asp-validation-for="NoCarnet" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" />
+
+                        <h5 class="text-secondary mb-3">Clasificación Institucional</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="TipoPersona" class="control-label fw-bold">Tipo de Persona</label>
+                                <select asp-for="TipoPersona" class="form-select">
+                                    <option value="">-- Seleccione el Tipo --</option>
+                                    <option value="Estudiante">Estudiante</option>
+                                    <option value="Profesor">Profesor</option>
+                                    <option value="Empleado Administrativo">Empleado Administrativo</option>
+                                    <option value="Visitante Externo">Visitante Externo</option>
+                                </select>
+                                <span asp-validation-for="TipoPersona" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Estado" class="control-label fw-bold">Estado del Usuario</label>
+                                <select asp-for="Estado" class="form-select">
+                                    <option value="true">Activo (Permitir Préstamos)</option>
+                                    <option value="false">Inactivo (Bloquear)</option>
+                                </select>
+                                <span asp-validation-for="Estado" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Volver al Listado</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-bold">Guardar Usuario</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Cedula" class="control-label"></label>
-                <input asp-for="Cedula" class="form-control" />
-                <span asp-validation-for="Cedula" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NoCarnet" class="control-label"></label>
-                <input asp-for="NoCarnet" class="form-control" />
-                <span asp-validation-for="NoCarnet" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoPersona" class="control-label"></label>
-                <input asp-for="TipoPersona" class="form-control" />
-                <span asp-validation-for="TipoPersona" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

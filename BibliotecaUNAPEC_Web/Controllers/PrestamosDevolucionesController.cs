@@ -46,14 +46,13 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // POST: PrestamosDevoluciones/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdPrestamo,IdEmpleado,IdLibro,IdUsuario,FechaPrestamo,FechaDevolucion,MontoPorDia,CantidadDias")] PrestamosDevolucione prestamo)
+        public async Task<IActionResult> Create([Bind("IdTransaccion,IdEmpleado,IdLibro,IdUsuario,FechaPrestamo,FechaDevolucion,MontoPorDia,CantidadDias,Comentario,Estado")] PrestamosDevolucione prestamo)
         {
-           
             ModelState.Remove("FechaPrestamo");
 
             if (ModelState.IsValid)
             {
-                // 1. Asignar la fecha actual automáticamente (extrayendo solo la fecha de DateTime.Now)
+                // 1. Asignar la fecha actual automáticamente
                 prestamo.FechaPrestamo = DateOnly.FromDateTime(DateTime.Now);
 
                 // 2. Buscar el libro que se está prestando
@@ -71,12 +70,93 @@ namespace BibliotecaUNAPEC_Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si hay error, recargar listas filtradas
             ViewData["IdLibro"] = new SelectList(_context.Libros.Where(l => l.Estado == true), "IdLibro", "Titulo", prestamo.IdLibro);
             ViewData["IdUsuario"] = new SelectList(_context.Usuarios.Where(u => u.Estado == true), "IdUsuario", "Nombre", prestamo.IdUsuario);
             ViewData["IdEmpleado"] = new SelectList(_context.Empleados.Where(e => e.Estado == true), "IdEmpleado", "Nombre", prestamo.IdEmpleado);
 
             return View(prestamo);
+        }
+
+        // GET: PrestamosDevoluciones/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var prestamo = await _context.PrestamosDevoluciones.FindAsync(id);
+            if (prestamo == null)
+            {
+                return NotFound();
+            }
+
+            // Cargar las listas sin filtrar por estado activo, 
+            // porque el libro o usuario original podría estar inactivo ahora, 
+            // pero necesitamos mostrar su nombre en la vista de solo lectura.
+            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "Titulo", prestamo.IdLibro);
+            ViewData["IdUsuario"] = new SelectList(_context.Usuarios, "IdUsuario", "Nombre", prestamo.IdUsuario);
+            ViewData["IdEmpleado"] = new SelectList(_context.Empleados, "IdEmpleado", "Nombre", prestamo.IdEmpleado);
+
+            return View(prestamo);
+        }
+
+        // POST: PrestamosDevoluciones/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("IdTransaccion,IdEmpleado,IdLibro,IdUsuario,FechaPrestamo,FechaDevolucion,MontoPorDia,CantidadDias,Comentario,Estado")] PrestamosDevolucione prestamo)
+        {
+            if (id != prestamo.IdTransaccion)
+            {
+                return NotFound();
+            }
+
+            // Removemos la validación de la fecha de devolución porque el sistema la asignará
+            ModelState.Remove("FechaDevolucion");
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // 1. Estampar la fecha real en que el libro fue entregado
+                    prestamo.FechaDevolucion = DateOnly.FromDateTime(DateTime.Now);
+
+                    // 2. Liberar el libro devolviendo su estado a Disponible (true)
+                    var libroDevuelto = await _context.Libros.FindAsync(prestamo.IdLibro);
+                    if (libroDevuelto != null)
+                    {
+                        libroDevuelto.Estado = true;
+                        _context.Update(libroDevuelto);
+                    }
+
+                    // 3. Guardar los cambios (incluyendo el comentario insertado en la vista)
+                    _context.Update(prestamo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PrestamoExists(prestamo.IdTransaccion))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["IdLibro"] = new SelectList(_context.Libros, "IdLibro", "Titulo", prestamo.IdLibro);
+            ViewData["IdUsuario"] = new SelectList(_context.Usuarios, "IdUsuario", "Nombre", prestamo.IdUsuario);
+            ViewData["IdEmpleado"] = new SelectList(_context.Empleados, "IdEmpleado", "Nombre", prestamo.IdEmpleado);
+
+            return View(prestamo);
+        }
+
+        private bool PrestamoExists(int id)
+        {
+            return _context.PrestamosDevoluciones.Any(e => e.IdTransaccion == id);
         }
     }
 }

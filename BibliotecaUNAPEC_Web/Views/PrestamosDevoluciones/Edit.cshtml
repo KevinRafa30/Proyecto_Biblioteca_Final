@@ -1,74 +1,80 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.PrestamosDevolucione
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Procesar Devolución";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Procesar Devolución de Libro</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-<h4>PrestamosDevolucione</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdTransaccion" />
-            <div class="form-group">
-                <label asp-for="FechaPrestamo" class="control-label"></label>
-                <input asp-for="FechaPrestamo" class="form-control" />
-                <span asp-validation-for="FechaPrestamo" class="text-danger"></span>
+                        <input type="hidden" asp-for="IdTransaccion" />
+                        <input type="hidden" asp-for="FechaPrestamo" />
+                        <input type="hidden" asp-for="MontoPorDia" />
+                        <input type="hidden" asp-for="CantidadDias" />
+                        <input type="hidden" asp-for="Estado" />
+                        <input type="hidden" asp-for="IdEmpleado" />
+                        <input type="hidden" asp-for="IdLibro" />
+                        <input type="hidden" asp-for="IdUsuario" />
+
+                        <div class="alert alert-info py-2 mb-4">
+                            <strong>Instrucción:</strong> Revise el estado físico del ejemplar antes de procesar la recepción en el sistema.
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-bold text-muted">Libro Prestado</label>
+                                <select class="form-select bg-light text-muted" asp-for="IdLibro" asp-items="ViewBag.IdLibro" disabled></select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-bold text-muted">Usuario Responsable</label>
+                                <select class="form-select bg-light text-muted" asp-for="IdUsuario" asp-items="ViewBag.IdUsuario" disabled></select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-bold text-muted">Fecha de Salida</label>
+                                <input type="text" class="form-control bg-light text-muted" value="@Model.FechaPrestamo" disabled />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="fw-bold text-muted">Plazo Acordado (Días)</label>
+                                <input type="text" class="form-control bg-light text-muted" value="@Model.CantidadDias" disabled />
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="form-group mb-4 mt-3">
+                            <label asp-for="Comentario" class="control-label fw-bold">Comentarios u Observaciones al Recibir</label>
+                            <textarea asp-for="Comentario" class="form-control" rows="3" placeholder="Ej. El libro fue devuelto en buen estado..."></textarea>
+                            <span asp-validation-for="Comentario" class="text-danger"></span>
+                        </div>
+
+                        <div class="alert alert-warning py-2 mb-0">
+                            <strong>Acción Automática:</strong> Al confirmar, la <b>Fecha de Devolución</b> se registrará con la fecha actual (@DateTime.Now.ToString("dd/MM/yyyy")) y el libro pasará a estar disponible en el inventario.
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar y Volver</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-bold">Confirmar Devolución</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="FechaDevolucion" class="control-label"></label>
-                <input asp-for="FechaDevolucion" class="form-control" />
-                <span asp-validation-for="FechaDevolucion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MontoPorDia" class="control-label"></label>
-                <input asp-for="MontoPorDia" class="form-control" />
-                <span asp-validation-for="MontoPorDia" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CantidadDias" class="control-label"></label>
-                <input asp-for="CantidadDias" class="form-control" />
-                <span asp-validation-for="CantidadDias" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Comentario" class="control-label"></label>
-                <input asp-for="Comentario" class="form-control" />
-                <span asp-validation-for="Comentario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdEmpleado" class="control-label"></label>
-                <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.IdEmpleado"></select>
-                <span asp-validation-for="IdEmpleado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdLibro" class="control-label"></label>
-                <select asp-for="IdLibro" class="form-control" asp-items="ViewBag.IdLibro"></select>
-                <span asp-validation-for="IdLibro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdUsuario" class="control-label"></label>
-                <select asp-for="IdUsuario" class="form-control" asp-items="ViewBag.IdUsuario"></select>
-                <span asp-validation-for="IdUsuario" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
