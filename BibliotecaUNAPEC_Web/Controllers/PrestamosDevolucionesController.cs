@@ -48,9 +48,12 @@ namespace BibliotecaUNAPEC_Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdPrestamo,IdEmpleado,IdLibro,IdUsuario,FechaPrestamo,FechaDevolucion,MontoPorDia,CantidadDias")] PrestamosDevolucione prestamo)
         {
+           
+            ModelState.Remove("FechaPrestamo");
+
             if (ModelState.IsValid)
             {
-                // 1. Asignar la fecha actual automáticamente
+                // 1. Asignar la fecha actual automáticamente (extrayendo solo la fecha de DateTime.Now)
                 prestamo.FechaPrestamo = DateOnly.FromDateTime(DateTime.Now);
 
                 // 2. Buscar el libro que se está prestando
