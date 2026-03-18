@@ -1,7 +1,8 @@
+using BibliotecaUNAPEC_Web.Data;
 using BibliotecaUNAPEC_Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using BibliotecaUNAPEC_Web.Data;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +88,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
+RotativaConfiguration.Setup(app.Environment.ContentRootPath, "Rotativa");
 app.Run();
 
