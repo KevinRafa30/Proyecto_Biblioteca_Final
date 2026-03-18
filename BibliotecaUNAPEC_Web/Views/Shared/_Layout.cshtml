@@ -33,24 +33,37 @@
 
                             @if (User.IsInRole("Admin"))
                             {
+                                @* --- SECCIÓN DE GESTIÓN ADMINISTRATIVA --- *@
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-danger fw-bold text-nowrap" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <a class="nav-link dropdown-toggle text-danger fw-bold text-nowrap" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Gestión Administrativa
                                     </a>
-                                    <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdown">
+                                    <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdownAdmin">
                                         <li><h6 class="dropdown-header">Mantenimientos Base</h6></li>
                                         <li><a class="dropdown-item" asp-controller="Autores" asp-action="Index">Autores</a></li>
                                         <li><a class="dropdown-item" asp-controller="Editoriales" asp-action="Index">Editoriales</a></li>
                                         <li><a class="dropdown-item" asp-controller="Ciencias" asp-action="Index">Ciencias</a></li>
                                         <li><a class="dropdown-item" asp-controller="Idiomas" asp-action="Index">Idiomas</a></li>
-
-                                        @* --- CORRECCIÓN APLICADA AQUÍ: TiposBibliografiums --- *@
                                         <li><a class="dropdown-item" asp-controller="TiposBibliografiums" asp-action="Index">Tipos de Bibliografía</a></li>
-
                                         <li><hr class="dropdown-divider"></li>
                                         <li><h6 class="dropdown-header">Personal y Usuarios</h6></li>
                                         <li><a class="dropdown-item" asp-controller="Usuarios" asp-action="Index">Usuarios Biblioteca</a></li>
                                         <li><a class="dropdown-item" asp-controller="Empleados" asp-action="Index">Empleados</a></li>
+                                    </ul>
+                                </li>
+
+                                @* --- NUEVA SECCIÓN DE REPORTES (SOLO ADMIN) --- *@
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-primary fw-bold text-nowrap" href="#" id="navbarDropdownReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Reportes
+                                    </a>
+                                    <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdownReportes">
+                                        <li><h6 class="dropdown-header">Exportaciones PDF</h6></li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Libros" asp-action="ImprimirReporte">
+                                                Inventario de Libros
+                                            </a>
+                                        </li>
                                     </ul>
                                 </li>
                             }

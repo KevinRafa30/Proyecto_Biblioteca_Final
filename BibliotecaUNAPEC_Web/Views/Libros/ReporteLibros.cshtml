@@ -1,0 +1,75 @@
+﻿@model IEnumerable<BibliotecaUNAPEC_Web.Models.Libro>
+@{
+    Layout = null; //Eliminar menús y barras laterales de la web
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Reporte de Inventario</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 12px; }
+        .header-section { border-bottom: 2px solid #004691; margin-bottom: 25px; padding-bottom: 10px; }
+        .footer-info { font-size: 10px; color: #555; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #f8f9fa !important; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="header-section mt-3">
+        <div class="row">
+            <div class="col-8">
+                <h2 class="text-primary fw-bold">Sistema de Gestión Bibliotecaria UNAPEC</h2>
+                <h5 class="text-secondary">Reporte de Inventario de Libros</h5>
+            </div>
+            <div class="col-4 text-end footer-info">
+                <div><strong>Fecha:</strong> @DateTime.Now.ToString("dd/MM/yyyy")</div>
+                <div><strong>Hora:</strong> @DateTime.Now.ToString("hh:mm tt")</div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>ISBN</th>
+                <th>Año</th>
+                <th>Autor</th>
+                <th>Ciencia</th>
+                <th>Idioma</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Titulo</td>
+                    <td>@item.Isbn</td>
+                    <td>@item.AnioPublicacion</td>
+                    <td>@(item.IdAutorNavigation?.Nombre ?? "N/A")</td>
+                    <td>@(item.IdCienciaNavigation?.Descripcion ?? "N/A")</td>
+                    <td>@(item.IdIdiomaNavigation?.Descripcion ?? "N/A")</td>
+                    <td>
+                        @if (item.Estado == true)
+                        {
+                            <span class="text-success">Disponible</span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">Prestado</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <p class="small text-muted">** Fin del Reporte **</p>
+    </div>
+</body>
+</html>

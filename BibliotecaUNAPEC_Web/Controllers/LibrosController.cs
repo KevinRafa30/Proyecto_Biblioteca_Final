@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BibliotecaUNAPEC_Web.Models;
+using Rotativa.AspNetCore; // Librería para la generación de reportes
 
 namespace BibliotecaUNAPEC_Web.Controllers
 {
@@ -14,7 +15,7 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // Lista de libros
         public async Task<IActionResult> Index()
         {
-            
+
             var libros = await _context.Libros
                 .Include(l => l.IdAutorNavigation)
                 .Include(l => l.IdEditorialNavigation)
@@ -24,6 +25,40 @@ namespace BibliotecaUNAPEC_Web.Controllers
                 .ToListAsync();
 
             return View(libros);
+        }
+
+        // Acción para generar el reporte PDF con filtros opcionales
+     
+        public async Task<IActionResult> ImprimirReporte(int? idAutor, int? idCiencia, int? idEditorial)
+        {
+            // Consulta base con Entity Framework
+            var query = _context.Libros
+                .Include(l => l.IdAutorNavigation)
+                .Include(l => l.IdEditorialNavigation)
+                .Include(l => l.IdCienciaNavigation)
+                .Include(l => l.IdIdiomaNavigation)
+                .AsQueryable();
+
+            
+            if (idAutor.HasValue)
+                query = query.Where(l => l.IdAutor == idAutor);
+
+            if (idCiencia.HasValue)
+                query = query.Where(l => l.IdCiencia == idCiencia);
+
+            if (idEditorial.HasValue)
+                query = query.Where(l => l.IdEditorial == idEditorial);
+
+            var listaLibros = await query.ToListAsync();
+
+            // Generación del archivo PDF
+            return new ViewAsPdf("ReporteLibros", listaLibros)
+            {
+                FileName = "Reporte_Inventario_UNAPEC.pdf",
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait,
+                // Configuración de pie de página con numeración automática 
+                CustomSwitches = "--footer-center \"Página [page] de [toPage]\" --footer-font-size \"9\""
+            };
         }
 
         // GET REQUEST: Libros/Create
