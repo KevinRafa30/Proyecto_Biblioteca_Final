@@ -166,5 +166,11 @@ namespace BibliotecaUNAPEC_Web.Controllers
         {
             return _context.Libros.Any(e => e.IdLibro == id);
         }
+
+        // Acción para abrir la vista de consumo de API
+        public IActionResult ConsultaApi()
+        {
+            return View();
+        }
     }
 }
