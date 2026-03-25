@@ -52,18 +52,17 @@
                                     </ul>
                                 </li>
 
-                                @* --- NUEVA SECCIÓN DE REPORTES (SOLO ADMIN) --- *@
+                                @* --- SECCIÓN DE REPORTES Y API (SOLO ADMIN) --- *@
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-primary fw-bold text-nowrap" href="#" id="navbarDropdownReportes" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Reportes
                                     </a>
                                     <ul class="dropdown-menu shadow" aria-labelledby="navbarDropdownReportes">
                                         <li><h6 class="dropdown-header">Exportaciones PDF</h6></li>
-                                        <li>
-                                            <a class="dropdown-item" asp-controller="Libros" asp-action="ImprimirReporte">
-                                                Inventario de Libros
-                                            </a>
-                                        </li>
+                                        <li><a class="dropdown-item" asp-controller="Libros" asp-action="ImprimirReporte">Inventario de Libros (PDF)</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><h6 class="dropdown-header">Servicios Web</h6></li>
+                                        <li><a class="dropdown-item" asp-controller="Libros" asp-action="ConsultaApi">Consulta vía API (JSON)</a></li>
                                     </ul>
                                 </li>
                             }
@@ -90,6 +89,7 @@
             &copy; 2026 - Biblioteca UNAPEC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

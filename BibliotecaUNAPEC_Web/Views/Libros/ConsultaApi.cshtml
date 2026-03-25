@@ -1,0 +1,127 @@
+﻿@{
+    ViewData["Title"] = "Consola de Datos API";
+}
+
+<div class="container mt-4">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-cpu"></i> Interfaz de Servicio Web - UNAPEC</h5>
+            <span class="badge bg-primary">Endpoint: /api/LibrosApi</span>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-4">
+                <p class="text-muted">Presione el botón para realizar una petición GET al servicio web y recuperar el inventario en formato JSON.</p>
+                <button id="btnCargar" class="btn btn-primary btn-lg">
+                    <i class="bi bi-arrow-clockwise"></i> Ejecutar Consulta API
+                </button>
+            </div>
+
+            <div id="loading" class="text-center my-5" style="display:none;">
+                <div class="spinner-border text-primary" role="status"></div>
+                <p class="mt-2 text-muted">Conectando con el servidor...</p>
+            </div>
+
+            <div id="resultadoContenedor" style="display:none;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-secondary fw-bold">Resultados del Inventario:</h6>
+                    <div>
+                        <button id="btnVerJson" class="btn btn-sm btn-outline-dark">
+                            <i class="bi bi-code-slash"></i> Ver JSON Crudo
+                        </button>
+                        <button id="btnDescargar" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-download"></i> Guardar .json
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover border">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>ISBN</th>
+                                <th>Autor</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCuerpo"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="jsonModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title font-monospace">Respuesta JSON del Servidor</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <pre id="jsonPre" class="bg-dark text-info p-3 rounded" style="max-height: 400px; overflow-y: auto; font-size: 0.85rem;"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let datosApi = [];
+
+        document.getElementById('btnCargar').onclick = async function() {
+            const loading = document.getElementById('loading');
+            const contenedor = document.getElementById('resultadoContenedor');
+            
+            loading.style.display = 'block';
+            contenedor.style.display = 'none';
+
+            try {
+                
+                const response = await fetch('/api/LibrosApi');
+                datosApi = await response.json();
+                
+                const cuerpo = document.getElementById('tablaCuerpo');
+                cuerpo.innerHTML = '';
+                
+                datosApi.forEach(l => {
+                    const fila = `<tr>
+                        <td><small>#${l.id}</small></td>
+                        <td class="fw-bold">${l.titulo}</td>
+                        <td><code>${l.isbn}</code></td>
+                        <td>${l.autor}</td>
+                        <td><span class="badge ${l.estado === 'Disponible' ? 'bg-success' : 'bg-danger'}">${l.estado}</span></td>
+                    </tr>`;
+                    cuerpo.innerHTML += fila;
+                });
+                
+                contenedor.style.display = 'block';
+            } catch (error) {
+                console.error(error);
+                alert("No se pudo obtener la información del servicio web.");
+            } finally {
+                loading.style.display = 'none';
+            }
+        };
+
+        
+        document.getElementById('btnVerJson').onclick = function() {
+            document.getElementById('jsonPre').textContent = JSON.stringify(datosApi, null, 4);
+            new bootstrap.Modal(document.getElementById('jsonModal')).show();
+        };
+
+        // Descargar el archivo
+        document.getElementById('btnDescargar').onclick = function() {
+            const blob = new Blob([JSON.stringify(datosApi, null, 4)], { type: 'application/json' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'datos_biblioteca_unapec.json';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+    </script>
+}
+               
