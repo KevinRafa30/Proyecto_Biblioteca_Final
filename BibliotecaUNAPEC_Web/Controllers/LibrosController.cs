@@ -15,7 +15,6 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // Lista de libros
         public async Task<IActionResult> Index()
         {
-
             var libros = await _context.Libros
                 .Include(l => l.IdAutorNavigation)
                 .Include(l => l.IdEditorialNavigation)
@@ -27,8 +26,32 @@ namespace BibliotecaUNAPEC_Web.Controllers
             return View(libros);
         }
 
+        // GET REQUEST: Libros/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Cargamos el libro incluyendo todas sus relaciones para que la vista de detalles las muestre correctamente
+            var libro = await _context.Libros
+                .Include(l => l.IdAutorNavigation)
+                .Include(l => l.IdEditorialNavigation)
+                .Include(l => l.IdCienciaNavigation)
+                .Include(l => l.IdIdiomaNavigation)
+                .Include(l => l.IdTipoBibliografiaNavigation)
+                .FirstOrDefaultAsync(m => m.IdLibro == id);
+
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            return View(libro);
+        }
+
         // Acción para generar el reporte PDF con filtros opcionales
-     
         public async Task<IActionResult> ImprimirReporte(int? idAutor, int? idCiencia, int? idEditorial)
         {
             // Consulta base con Entity Framework
@@ -39,7 +62,6 @@ namespace BibliotecaUNAPEC_Web.Controllers
                 .Include(l => l.IdIdiomaNavigation)
                 .AsQueryable();
 
-            
             if (idAutor.HasValue)
                 query = query.Where(l => l.IdAutor == idAutor);
 
@@ -77,7 +99,6 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // POST REQUEST
         [HttpPost]
         [ValidateAntiForgeryToken] // Para ataques de suplantación de identidad (CSRF)
-        // Bind para incluir TODOS los campos nuevos de la base de datos y prevenir ataques de sobrepublicación (over-posting)
         public async Task<IActionResult> Create([Bind("IdLibro,Titulo,Isbn,AnioPublicacion,Estado,IdAutor,IdEditorial,IdCiencia,IdIdioma,IdTipoBibliografia")] Libro libro)
         {
             // Revisando que el modelo sea válido según DataAnnotations antes de guardar.
