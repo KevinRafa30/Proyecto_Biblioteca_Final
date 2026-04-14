@@ -4,20 +4,51 @@
     ViewData["Title"] = "Cerrar sesión";
 }
 
-<header>
-    <h1>@ViewData["Title"]</h1>
-    @{
-       
-        if (User.Identity?.IsAuthenticated ?? false)
-        {
-            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Haz clic aquí para cerrar sesión</button>
-            </form>
-        }
-        else
-        {
-            // Si ya no está autenticado, mostramos el mensaje de éxito
-            <p>Has cerrado sesión correctamente de la aplicación.</p>
-        }
-    }
-</header>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card rounded-1 border shadow-none">
+                <div class="card-header bg-light border-bottom p-3">
+                    <h6 class="mb-0 fw-bold text-dark text-uppercase small text-center">
+                        <i class="bi bi-door-open me-2 text-primary"></i>Finalizar Sesión
+                    </h6>
+                </div>
+                <div class="card-body p-5 text-center">
+                    @{
+                        if (User.Identity?.IsAuthenticated ?? false)
+                        {
+                            <i class="bi bi-question-circle text-primary fs-1 mb-3 d-block"></i>
+                            <h4 class="fw-bold text-dark mb-3">¿Deseas salir del sistema?</h4>
+                            <p class="text-muted mb-4 small">Al cerrar sesión, deberás ingresar tus credenciales nuevamente para acceder al catálogo.</p>
+
+                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                                <button type="submit" class="btn btn-primary btn-lg w-100 rounded-1 fw-bold border-0">
+                                    Confirmar Salida
+                                </button>
+                                <a href="~/" class="btn btn-link text-decoration-none text-secondary mt-2 small">Cancelar</a>
+                            </form>
+                        }
+                        else
+                        {
+                            <i class="bi bi-check-circle text-success fs-1 mb-3 d-block"></i>
+                            <h4 class="fw-bold text-dark mb-3">Sesión Finalizada</h4>
+                            <p class="text-muted mb-4">Has salido correctamente del Sistema de Gestión Bibliotecaria UNAPEC.</p>
+                            
+                            <hr class="opacity-50" />
+                            
+                            <a asp-page="./Login" class="btn btn-primary rounded-1 fw-bold px-4">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Volver al Inicio
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <p class="text-muted small text-uppercase" style="letter-spacing: 1px;">
+                    © @DateTime.Now.Year Universidad UNAPEC
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
