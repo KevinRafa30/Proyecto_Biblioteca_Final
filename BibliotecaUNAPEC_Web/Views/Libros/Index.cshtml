@@ -4,58 +4,84 @@
     ViewData["Title"] = "Catálogo de Libros";
 }
 
-<div class="container mt-4">
+<div class="container-fluid mt-4 px-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">Catálogo de Libros</h2>
-        <a asp-action="Create" class="btn btn-primary shadow-sm">Registrar Nuevo Libro</a>
+        <div>
+            <h2 class="fw-bold text-primary mb-0">Catálogo de Libros</h2>
+        </div>
+        <a asp-action="Create" class="btn btn-primary shadow-sm px-4 fw-bold">
+            <i class="bi bi-plus-lg me-1"></i> Nuevo Libro
+        </a>
     </div>
 
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 rounded-3">
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover table-striped mb-0">
+                <table class="table table-hover align-middle mb-0">
                     <thead class="table-dark">
-                        <tr>
-                            <th>Título</th>
-                            <th>ISBN</th>
-                            <th>Año</th>
-                            <th>Autor</th>
-                            <th>Editorial</th>
-                            <th>Ciencia</th>
-                            <th>Idioma</th>
-                            <th>Formato</th>
-                            <th>Estado</th>
-                            <th class="text-center">Acciones</th>
+                        <tr class="small">
+                            <th style="width: 30%" class="ps-4 py-3 text-uppercase">Libro / Título</th>
+                            <th class="py-3 text-uppercase">ISBN</th>
+                            <th class="py-3 text-uppercase text-center">Año</th>
+                            <th class="py-3 text-uppercase">Autor</th>
+                            <th class="py-3 text-uppercase">Editorial</th>
+                            <th class="py-3 text-center text-uppercase">Estado</th>
+                            <th class="py-3 text-center pe-4 text-uppercase">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td class="align-middle fw-bold">@item.Titulo</td>
-                                <td class="align-middle">@item.Isbn</td>
-                                <td class="align-middle">@item.AnioPublicacion</td>
-
-                                <td class="align-middle">@item.IdAutorNavigation.Nombre</td>
-                                <td class="align-middle">@item.IdEditorialNavigation.Nombre</td>
-                                <td class="align-middle">@item.IdCienciaNavigation.Descripcion</td>
-                                <td class="align-middle">@item.IdIdiomaNavigation.Descripcion</td>
-                                <td class="align-middle">@item.IdTipoBibliografiaNavigation.Descripcion</td>
-
-                                <td class="align-middle">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3 border rounded bg-light overflow-hidden shadow-sm" style="width: 45px; height: 65px; flex-shrink: 0;">
+                                            <img src="https://covers.openlibrary.org/b/isbn/@item.Isbn-S.jpg"
+                                                 class="w-100 h-100"
+                                                 style="object-fit: cover;"
+                                                 onerror="this.src='https://placehold.co/45x65/f8f9fa/003366?text=?'">
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark">@item.Titulo</div>
+                                            <small class="text-muted small">Ref: #@item.IdLibro</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="font-monospace text-muted small">@item.Isbn</td>
+                                <td class="text-center">@item.AnioPublicacion</td>
+                                <td>
+                                    <div class="fw-bold text-dark">@item.IdAutorNavigation?.Nombre</div>
+                                    <div class="text-muted small">@item.IdAutorNavigation?.Apellido</div>
+                                </td>
+                                <td>
+                                    <span class="text-dark fw-semibold">@item.IdEditorialNavigation?.Nombre</span>
+                                </td>
+                                <td class="text-center">
                                     @if (item.Estado == true)
                                     {
-                                        <span class="badge bg-success py-2 px-3">Disponible</span>
+                                        <span class="badge rounded-pill bg-success-subtle text-success border border-success px-3 py-2" style="font-size: 0.75rem;">
+                                            <i class="bi bi-check2"></i> Disponible
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-danger py-2 px-3">No Disponible</span>
+                                        <span class="badge rounded-pill bg-danger-subtle text-danger border border-danger px-3 py-2" style="font-size: 0.75rem;">
+                                            <i class="bi bi-bookmark-x"></i> Prestado
+                                        </span>
                                     }
                                 </td>
-                                <td class="align-middle text-center">
-                                    <div class="btn-group" role="group">
-                                        <a asp-action="Edit" asp-route-id="@item.IdLibro" class="btn btn-sm btn-outline-primary">Editar</a>
-                                        <a asp-action="Details" asp-route-id="@item.IdLibro" class="btn btn-sm btn-outline-secondary">Detalles</a>
+                                <td class="text-center pe-4">
+                                    <div class="btn-group shadow-sm" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.IdLibro"
+                                               class="btn btn-primary btn-sm px-3 fw-semibold"
+                                               title="Editar">
+                                            <i class="bi bi-pencil-square me-1"></i> Editar
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.IdLibro"
+                                               class="btn btn-secondary btn-sm px-3 fw-semibold border-start border-white border-opacity-25"
+                                               title="Detalles">
+                                            <i class="bi bi-eye me-1"></i> Detalles
+                                        </a>
                                     </div>
                                 </td>
                             </tr>

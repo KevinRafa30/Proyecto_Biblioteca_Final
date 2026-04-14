@@ -7,43 +7,53 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
                 <div>
-                    <h2 class="fw-bold text-primary mb-0">Información Bibliográfica</h2>
-                    <p class="text-muted small">Consulta detallada del recurso</p>
+                    <h2 class="fw-bold text-primary mb-0">Ficha Bibliográfica</h2>
                 </div>
-                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
-                    <i class="bi bi-arrow-left"></i> Volver al Catálogo
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Volver al Catálogo
                 </a>
             </div>
 
             <div class="row">
-                <div class="col-md-5">
-                    <div class="card shadow-sm border-0 mb-4 h-100">
+                <div class="col-md-5 mb-4">
+                    <div class="card rounded-1 border shadow-none h-100">
                         <div class="card-body text-center p-4">
                             <div class="mb-4">
-                                <i class="bi bi-book text-primary" style="font-size: 5rem;"></i>
+                                <img src="https://covers.openlibrary.org/b/isbn/@Model.Isbn-L.jpg"
+                                     class="img-fluid rounded-1 border shadow-sm"
+                                     style="max-height: 400px; width: auto; background-color: #f8f9fa;"
+                                     alt="Portada"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/400x600/f8f9fa/003366?text=Sin+Portada'">
                             </div>
-                            <h3 class="fw-bold text-dark">@Model.Titulo</h3>
-                            <p class="text-muted">ISBN: <span class="font-monospace">@Model.Isbn</span></p>
+
+                            <h4 class="fw-bold text-dark mb-1">@Model.Titulo</h4>
+                            <p class="text-muted small font-monospace">ISBN: @Model.Isbn</p>
                             
-                            <hr />
+                            <hr class="my-4" />
                             
-                            <div class="d-grid gap-3">
-                                <div class="p-2 bg-light rounded border text-start">
-                                    <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Año de Publicación</small>
-                                    <span class="fs-5">@Model.AnioPublicacion</span>
+                            <div class="text-start">
+                                <div class="mb-3">
+                                    <label class="small fw-bold text-muted text-uppercase d-block mb-1">Año de Publicación</label>
+                                    <div class="p-2 bg-light border rounded-1 fw-bold text-dark">
+                                        <i class="bi bi-calendar3 me-2 text-primary"></i>@Model.AnioPublicacion
+                                    </div>
                                 </div>
                                 
-                                <div class="p-2 bg-light rounded border text-start">
-                                    <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Estado de Disponibilidad</small>
+                                <div class="mb-0">
+                                    <label class="small fw-bold text-muted text-uppercase d-block mb-1">Estatus en Inventario</label>
                                     @if (Model.Estado == true)
                                     {
-                                        <span class="badge bg-success py-2 px-3 mt-1">Disponible para Préstamo</span>
+                                        <div class="p-2 bg-success-subtle border border-success-subtle text-success rounded-1 fw-bold">
+                                            <i class="bi bi-check-circle-fill me-2"></i>Disponible para Préstamo
+                                        </div>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-danger py-2 px-3 mt-1">No Disponible / Prestado</span>
+                                        <div class="p-2 bg-danger-subtle border border-danger-subtle text-danger rounded-1 fw-bold">
+                                            <i class="bi bi-exclamation-octagon-fill me-2"></i>No Disponible / Prestado
+                                        </div>
                                     }
                                 </div>
                             </div>
@@ -51,44 +61,56 @@
                     </div>
                 </div>
 
-                <div class="col-md-7">
-                    <div class="card shadow-sm border-0 h-100">
-                        <div class="card-header bg-dark text-white p-3">
-                            <h5 class="mb-0">Metadatos y Clasificación</h5>
+                <div class="col-md-7 mb-4">
+                    <div class="card rounded-1 border shadow-none h-100">
+                        <div class="card-header bg-light border-bottom p-3">
+                            <h6 class="mb-0 fw-bold text-dark text-uppercase small">
+                                <i class="bi bi-info-square me-2 text-primary"></i>Especificaciones del Registro
+                            </h6>
                         </div>
-                        <div class="card-body p-4">
+                        <div class="card-body p-4 text-dark">
                             <div class="row mb-4">
-                                <div class="col-sm-5 fw-bold text-muted">Autor:</div>
-                                <div class="col-sm-7 fs-5">@Model.IdAutorNavigation?.Nombre @Model.IdAutorNavigation?.Apellido</div>
-                            </div>
-                            <hr class="text-light" />
-                            <div class="row mb-4">
-                                <div class="col-sm-5 fw-bold text-muted">Editorial:</div>
-                                <div class="col-sm-7">@Model.IdEditorialNavigation?.Nombre</div>
-                            </div>
-                            <hr class="text-light" />
-                            <div class="row mb-4">
-                                <div class="col-sm-5 fw-bold text-muted">Área del Conocimiento:</div>
-                                <div class="col-sm-7">
-                                    <span class="badge bg-info text-dark">@Model.IdCienciaNavigation?.Descripcion</span>
+                                <div class="col-sm-4 fw-bold text-muted small text-uppercase">Autor Responsable</div>
+                                <div class="col-sm-8 fs-5 fw-bold text-dark">
+                                    @Model.IdAutorNavigation?.Nombre @Model.IdAutorNavigation?.Apellido
                                 </div>
                             </div>
-                            <hr class="text-light" />
+
                             <div class="row mb-4">
-                                <div class="col-sm-5 fw-bold text-muted">Idioma:</div>
-                                <div class="col-sm-7">@Model.IdIdiomaNavigation?.Descripcion</div>
+                                <div class="col-sm-4 fw-bold text-muted small text-uppercase">Casa Editorial</div>
+                                <div class="col-sm-8">
+                                    <i class="bi bi-building me-1 text-secondary"></i> @Model.IdEditorialNavigation?.Nombre
+                                </div>
                             </div>
-                            <hr class="text-light" />
+
                             <div class="row mb-4">
-                                <div class="col-sm-5 fw-bold text-muted">Tipo de Bibliografía:</div>
-                                <div class="col-sm-7">
-                                    <span class="badge bg-secondary">@Model.IdTipoBibliografiaNavigation?.Descripcion</span>
+                                <div class="col-sm-4 fw-bold text-muted small text-uppercase">Área / Ciencia</div>
+                                <div class="col-sm-8">
+                                    <span class="text-primary fw-semibold">
+                                        <i class="bi bi-journal-bookmark me-1"></i> @Model.IdCienciaNavigation?.Descripcion
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-sm-4 fw-bold text-muted small text-uppercase">Idioma Original</div>
+                                <div class="col-sm-8">
+                                    @Model.IdIdiomaNavigation?.Descripcion
+                                </div>
+                            </div>
+
+                            <div class="row mb-0">
+                                <div class="col-sm-4 fw-bold text-muted small text-uppercase">Tipo de Recurso</div>
+                                <div class="col-sm-8">
+                                    <span class="badge bg-secondary rounded-1 fw-normal px-2">
+                                        @Model.IdTipoBibliografiaNavigation?.Descripcion
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer bg-white border-top-0 p-3 text-end">
-                            <a asp-action="Edit" asp-route-id="@Model?.IdLibro" class="btn btn-primary px-4 shadow-sm">
-                                <i class="bi bi-pencil-square"></i> Editar Información
+                        <div class="card-footer bg-light border-top p-3 text-end">
+                            <a asp-action="Edit" asp-route-id="@Model?.IdLibro" class="btn btn-primary px-4 rounded-1 fw-bold border-0">
+                                <i class="bi bi-pencil-square me-1"></i> Editar Información
                             </a>
                         </div>
                     </div>
