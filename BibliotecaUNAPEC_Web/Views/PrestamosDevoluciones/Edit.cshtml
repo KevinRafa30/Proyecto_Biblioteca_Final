@@ -7,9 +7,16 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-primary">Procesar Recepción</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Volver al Listado
+                </a>
+            </div>
+
             <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Procesar Devolución de Libro</h4>
+                <div class="card-header bg-dark text-white p-3">
+                    <h5 class="mb-0"><i class="bi bi-arrow-return-left me-2"></i>Retorno de Ejemplar</h5>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Edit">
@@ -23,48 +30,62 @@
                         <input type="hidden" asp-for="IdEmpleado" />
                         <input type="hidden" asp-for="IdLibro" />
                         <input type="hidden" asp-for="IdUsuario" />
+                        
+                        <input type="hidden" name="FechaDevolucion" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
 
-                        <div class="alert alert-info py-2 mb-4">
-                            <strong>Instrucción:</strong> Revise el estado físico del ejemplar antes de procesar la recepción en el sistema.
+                        <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+                            <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                            <div>
+                                <strong>Instrucción:</strong> Verifique que el ISBN coincida y que no falten páginas o existan daños físicos graves.
+                            </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
-                                <label class="fw-bold text-muted">Libro Prestado</label>
-                                <select class="form-select bg-light text-muted" asp-for="IdLibro" asp-items="ViewBag.IdLibro" disabled></select>
+                                <label class="form-label fw-bold text-muted">Libro Prestado</label>
+                                <select class="form-select bg-light border-0" asp-for="IdLibro" asp-items="ViewBag.IdLibro" disabled></select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="fw-bold text-muted">Usuario Responsable</label>
-                                <select class="form-select bg-light text-muted" asp-for="IdUsuario" asp-items="ViewBag.IdUsuario" disabled></select>
+                                <label class="form-label fw-bold text-muted">Usuario Responsable</label>
+                                <select class="form-select bg-light border-0" asp-for="IdUsuario" asp-items="ViewBag.IdUsuario" disabled></select>
                             </div>
                         </div>
 
                         <div class="row mb-4">
                             <div class="col-md-6 mb-3">
-                                <label class="fw-bold text-muted">Fecha de Salida</label>
-                                <input type="text" class="form-control bg-light text-muted" value="@Model.FechaPrestamo" disabled />
+                                <label class="form-label fw-bold text-muted">Fecha de Salida</label>
+                                <div class="form-control bg-light border-0 text-muted">
+                                    <i class="bi bi-calendar-event me-2"></i>@(Model.FechaPrestamo?.ToString("dd/MM/yyyy") ?? "N/A")
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="fw-bold text-muted">Plazo Acordado (Días)</label>
-                                <input type="text" class="form-control bg-light text-muted" value="@Model.CantidadDias" disabled />
+                                <label class="form-label fw-bold text-muted">Plazo Acordado</label>
+                                <div class="form-control bg-light border-0 text-muted">
+                                    <i class="bi bi-clock-history me-2"></i>@Model.CantidadDias Días
+                                </div>
                             </div>
                         </div>
 
-                        <hr />
+                        <hr class="text-muted" />
 
                         <div class="form-group mb-4 mt-3">
-                            <label asp-for="Comentario" class="control-label fw-bold">Comentarios u Observaciones al Recibir</label>
-                            <textarea asp-for="Comentario" class="form-control" rows="3" placeholder="Ej. El libro fue devuelto en buen estado..."></textarea>
-                            <span asp-validation-for="Comentario" class="text-danger"></span>
+                            <label asp-for="Comentario" class="form-label fw-bold text-primary">Comentarios u Observaciones al Recibir</label>
+                            <textarea asp-for="Comentario" class="form-control shadow-sm" rows="3"
+                                      placeholder="Ej. Sin daños visibles, entregado a tiempo..."></textarea>
+                            <span asp-validation-for="Comentario" class="text-danger small"></span>
                         </div>
 
-                        <div class="alert alert-warning py-2 mb-0">
-                            <strong>Acción Automática:</strong> Al confirmar, la <b>Fecha de Devolución</b> se registrará con la fecha actual (@DateTime.Now.ToString("dd/MM/yyyy")) y el libro pasará a estar disponible en el inventario.
+                        <div class="alert alert-warning py-3 border-0 shadow-sm d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+                            <div>
+                                <strong>Confirmación:</strong> Se marcará como devuelto hoy <b>@DateTime.Now.ToString("D")</b>.
+                            </div>
                         </div>
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-outline-secondary">Cancelar y Volver</a>
-                            <button type="submit" class="btn btn-primary px-4 fw-bold">Confirmar Devolución</button>
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg shadow fw-bold">
+                                <i class="bi bi-check2-circle me-1"></i> Confirmar Recepción
+                            </button>
                         </div>
                     </form>
                 </div>

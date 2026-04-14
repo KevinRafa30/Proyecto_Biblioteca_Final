@@ -1,72 +1,91 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.PrestamosDevolucione
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles de Transacción";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-primary">Detalle de Préstamo</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Volver al Historial
+                </a>
+            </div>
 
-<div>
-    <h4>PrestamosDevolucione</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaPrestamo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaPrestamo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaDevolucion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaDevolucion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MontoPorDia)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MontoPorDia)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CantidadDias)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CantidadDias)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Comentario)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Comentario)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdEmpleadoNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdEmpleadoNavigation.IdEmpleado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdLibroNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdLibroNavigation.Isbn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdUsuarioNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdUsuarioNavigation.IdUsuario)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdTransaccion">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Transacción #@Model.IdTransaccion</h5>
+                    <span class="badge @(Model.FechaDevolucion == null ? "bg-warning text-dark" : "bg-success") py-2 px-3">
+                        @(Model.FechaDevolucion == null ? "PENDIENTE" : "COMPLETADO")
+                    </span>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-6 border-end">
+                            <h6 class="text-primary fw-bold text-uppercase small mb-3">Información del Usuario</h6>
+                            <p class="mb-1"><span class="text-muted small">Nombre:</span> <br /><strong>@Model.IdUsuarioNavigation?.Nombre</strong></p>
+                            <p class="mb-0"><span class="text-muted small">ID Usuario:</span> <br /><strong>@Model.IdUsuarioNavigation?.IdUsuario</strong></p>
+                        </div>
+                        <div class="col-md-6 ps-md-4">
+                            <h6 class="text-primary fw-bold text-uppercase small mb-3">Atendido por (Empleado)</h6>
+                            <p class="mb-0"><span class="text-muted small">Nombre:</span> <br /><strong>@Model.IdEmpleadoNavigation?.Nombre</strong></p>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="bg-light p-3 rounded mb-4 border-start border-primary border-4">
+                        <h6 class="text-muted fw-bold text-uppercase small mb-2">Libro Solicitado</h6>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-book fs-2 me-3 text-secondary"></i>
+                            <div>
+                                <h5 class="mb-0 fw-bold">@Model.IdLibroNavigation?.Titulo</h5>
+                                <span class="text-muted small">ISBN: @Model.IdLibroNavigation?.Isbn</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row text-center mb-4">
+                        <div class="col-sm-3">
+                            <label class="text-muted d-block small">Fecha Salida</label>
+                            <span class="fw-bold">@Model.FechaPrestamo?.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="text-muted d-block small">Fecha Retorno</label>
+                            <span class="fw-bold text-success">
+                                @(Model.FechaDevolucion?.ToString("dd/MM/yyyy") ?? "En curso...")
+                            </span>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="text-muted d-block small">Plazo (Días)</label>
+                            <span class="fw-bold">@Model.CantidadDias</span>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="text-muted d-block small">Costo por Día</label>
+                            <span class="fw-bold text-primary">$@Model.MontoPorDia</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label class="text-muted fw-bold text-uppercase small">Observaciones Técnicas:</label>
+                        <div class="p-3 border rounded bg-white mt-1 italic">
+                            @(string.IsNullOrEmpty(Model.Comentario) ? "Sin observaciones adicionales registradas." : Model.Comentario)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white border-top-0 p-3 text-end">
+                    @if (Model.FechaDevolucion == null)
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model?.IdTransaccion" class="btn btn-success px-4 shadow-sm fw-bold">
+                            <i class="bi bi-arrow-return-left"></i> Procesar Devolución
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
