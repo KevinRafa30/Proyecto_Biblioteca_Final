@@ -12,18 +12,48 @@ namespace BibliotecaUNAPEC_Web.Controllers
     {
         private readonly BibliotecaUnapecContext _context = context;
 
-        // Lista de libros
-        public async Task<IActionResult> Index()
+        // Lista de libros con soporte para filtros dinámicos (Ciencia, Idioma, Tipo y Texto)
+        public async Task<IActionResult> Index(string searchString, int? idCiencia, int? idIdioma, int? idTipo)
         {
-            var libros = await _context.Libros
+            // Consulta base con todas las relaciones cargadas para no tener nulos en la vista
+            var query = _context.Libros
                 .Include(l => l.IdAutorNavigation)
                 .Include(l => l.IdEditorialNavigation)
                 .Include(l => l.IdCienciaNavigation)
                 .Include(l => l.IdIdiomaNavigation)
                 .Include(l => l.IdTipoBibliografiaNavigation)
-                .ToListAsync();
+                .AsQueryable();
 
-            return View(libros);
+            // Lógica de filtrado: solo aplicamos si el usuario seleccionó algo en la UI
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(l => l.Titulo.Contains(searchString) || l.Isbn.Contains(searchString));
+            }
+
+            if (idCiencia.HasValue)
+            {
+                query = query.Where(l => l.IdCiencia == idCiencia);
+            }
+
+            if (idIdioma.HasValue)
+            {
+                query = query.Where(l => l.IdIdioma == idIdioma);
+            }
+
+            if (idTipo.HasValue)
+            {
+                query = query.Where(l => l.IdTipoBibliografia == idTipo);
+            }
+
+            // Cargamos los SelectList para que los filtros de la vista se mantengan poblados
+            ViewData["IdCiencia"] = new SelectList(_context.Ciencias, "IdCiencia", "Descripcion", idCiencia);
+            ViewData["IdIdioma"] = new SelectList(_context.Idiomas, "IdIdioma", "Descripcion", idIdioma);
+            ViewData["IdTipoBibliografia"] = new SelectList(_context.TiposBibliografia, "IdTipoBibliografia", "Descripcion", idTipo);
+
+            // Pasamos el texto de búsqueda actual para que no se borre del input al filtrar
+            ViewData["CurrentFilter"] = searchString;
+
+            return View(await query.ToListAsync());
         }
 
         // GET REQUEST: Libros/Details/5

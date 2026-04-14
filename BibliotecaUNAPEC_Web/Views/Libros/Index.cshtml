@@ -8,10 +8,48 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="fw-bold text-primary mb-0">Catálogo de Libros</h2>
+            <p class="text-muted small">Inventario general de recursos bibliográficos UNAPEC</p>
         </div>
         <a asp-action="Create" class="btn btn-primary shadow-sm px-4 fw-bold">
             <i class="bi bi-plus-lg me-1"></i> Nuevo Libro
         </a>
+    </div>
+
+    <div class="card border shadow-none mb-4 bg-light">
+        <div class="card-body p-3">
+            <form method="get" asp-action="Index" class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Área / Ciencia</label>
+                    <select name="idCiencia" class="form-select form-select-sm rounded-1" asp-items="ViewBag.IdCiencia">
+                        <option value="">-- Todas las áreas --</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Idioma</label>
+                    <select name="idIdioma" class="form-select form-select-sm rounded-1" asp-items="ViewBag.IdIdioma">
+                        <option value="">-- Todos --</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Formato / Tipo</label>
+                    <select name="idTipo" class="form-select form-select-sm rounded-1" asp-items="ViewBag.IdTipoBibliografia">
+                        <option value="">-- Todos los formatos --</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted text-uppercase">Título o ISBN</label>
+                    <input type="text" name="searchString" class="form-control form-control-sm rounded-1" placeholder="Buscar..." value="@ViewData["CurrentFilter"]" />
+                </div>
+                <div class="col-md-2 d-flex gap-1">
+                    <button type="submit" class="btn btn-dark btn-sm w-100 fw-bold">
+                        <i class="bi bi-search me-1"></i> Filtrar
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary btn-sm" title="Limpiar Filtros">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="card shadow-sm border-0 rounded-3">
@@ -20,21 +58,28 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-dark">
                         <tr class="small">
-                            <th style="width: 30%" class="ps-4 py-3 text-uppercase">Libro / Título</th>
-                            <th class="py-3 text-uppercase">ISBN</th>
-                            <th class="py-3 text-uppercase text-center">Año</th>
-                            <th class="py-3 text-uppercase">Autor</th>
-                            <th class="py-3 text-uppercase">Editorial</th>
+                            <th style="width: 35%" class="ps-4 py-3 text-uppercase">Libro / Título</th>
+                            <th class="py-3 text-uppercase">Identificación</th>
+                            <th class="py-3 text-uppercase">Autor / Editorial</th>
                             <th class="py-3 text-center text-uppercase">Estado</th>
                             <th class="py-3 text-center pe-4 text-uppercase">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-info-circle fs-2 d-block mb-2"></i>
+                                    No se encontraron libros con los filtros seleccionados.
+                                </td>
+                            </tr>
+                        }
                         @foreach (var item in Model)
                         {
                             <tr>
                                 <td class="ps-4">
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center py-1">
                                         <div class="me-3 border rounded bg-light overflow-hidden shadow-sm" style="width: 45px; height: 65px; flex-shrink: 0;">
                                             <img src="https://covers.openlibrary.org/b/isbn/@item.Isbn-S.jpg"
                                                  class="w-100 h-100"
@@ -43,18 +88,19 @@
                                         </div>
                                         <div>
                                             <div class="fw-bold text-dark">@item.Titulo</div>
-                                            <small class="text-muted small">Ref: #@item.IdLibro</small>
+                                            <small class="badge bg-primary-subtle text-primary border border-primary-subtle" style="font-size: 0.65rem;">
+                                                @(item.IdCienciaNavigation?.Descripcion ?? "General")
+                                            </small>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="font-monospace text-muted small">@item.Isbn</td>
-                                <td class="text-center">@item.AnioPublicacion</td>
                                 <td>
-                                    <div class="fw-bold text-dark">@item.IdAutorNavigation?.Nombre</div>
-                                    <div class="text-muted small">@item.IdAutorNavigation?.Apellido</div>
+                                    <div class="font-monospace text-muted small">ISBN: @item.Isbn</div>
+                                    <div class="small text-muted">Año: @item.AnioPublicacion</div>
                                 </td>
                                 <td>
-                                    <span class="text-dark fw-semibold">@item.IdEditorialNavigation?.Nombre</span>
+                                    <div class="fw-bold text-dark small">@item.IdAutorNavigation?.Nombre @item.IdAutorNavigation?.Apellido</div>
+                                    <div class="text-muted extra-small" style="font-size: 0.75rem;">@item.IdEditorialNavigation?.Nombre</div>
                                 </td>
                                 <td class="text-center">
                                     @if (item.Estado == true)
@@ -71,17 +117,9 @@
                                     }
                                 </td>
                                 <td class="text-center pe-4">
-                                    <div class="btn-group shadow-sm" role="group">
-                                        <a asp-action="Edit" asp-route-id="@item.IdLibro"
-                                               class="btn btn-primary btn-sm px-3 fw-semibold"
-                                               title="Editar">
-                                            <i class="bi bi-pencil-square me-1"></i> Editar
-                                        </a>
-                                        <a asp-action="Details" asp-route-id="@item.IdLibro"
-                                               class="btn btn-secondary btn-sm px-3 fw-semibold border-start border-white border-opacity-25"
-                                               title="Detalles">
-                                            <i class="bi bi-eye me-1"></i> Detalles
-                                        </a>
+                                    <div class="btn-group shadow-sm">
+                                        <a asp-action="Edit" asp-route-id="@item.IdLibro" class="btn btn-primary btn-sm px-3 fw-semibold">Editar</a>
+                                        <a asp-action="Details" asp-route-id="@item.IdLibro" class="btn btn-secondary btn-sm px-3 fw-semibold border-start border-white border-opacity-25">Detalles</a>
                                     </div>
                                 </td>
                             </tr>
