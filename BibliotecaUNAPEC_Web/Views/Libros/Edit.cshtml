@@ -1,74 +1,124 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Libro
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Libro";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-primary">Editar Información del Libro</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Volver al Catálogo
+                </a>
+            </div>
 
-<h4>Libro</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdLibro" />
-            <div class="form-group">
-                <label asp-for="Titulo" class="control-label"></label>
-                <input asp-for="Titulo" class="form-control" />
-                <span asp-validation-for="Titulo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Isbn" class="control-label"></label>
-                <input asp-for="Isbn" class="form-control" />
-                <span asp-validation-for="Isbn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AnioPublicacion" class="control-label"></label>
-                <input asp-for="AnioPublicacion" class="form-control" />
-                <span asp-validation-for="AnioPublicacion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdAutor" class="control-label"></label>
-                <select asp-for="IdAutor" class="form-control" asp-items="ViewBag.IdAutor"></select>
-                <span asp-validation-for="IdAutor" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdEditorial" class="control-label"></label>
-                <select asp-for="IdEditorial" class="form-control" asp-items="ViewBag.IdEditorial"></select>
-                <span asp-validation-for="IdEditorial" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdCiencia" class="control-label"></label>
-                <select asp-for="IdCiencia" class="form-control" asp-items="ViewBag.IdCiencia"></select>
-                <span asp-validation-for="IdCiencia" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdIdioma" class="control-label"></label>
-                <select asp-for="IdIdioma" class="form-control" asp-items="ViewBag.IdIdioma"></select>
-                <span asp-validation-for="IdIdioma" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IdTipoBibliografia" class="control-label"></label>
-                <select asp-for="IdTipoBibliografia" class="form-control" asp-items="ViewBag.IdTipoBibliografia"></select>
-                <span asp-validation-for="IdTipoBibliografia" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="IdLibro" />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-dark text-white p-3">
+                                <h5 class="mb-0"><i class="bi bi-journal-text me-2"></i>Datos Generales</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Titulo" class="form-label fw-bold">Título del Libro</label>
+                                    <input asp-for="Titulo" class="form-control" placeholder="Ej. El Quijote" />
+                                    <span asp-validation-for="Titulo" class="text-danger small"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="Isbn" class="form-label fw-bold">ISBN</label>
+                                            <input asp-for="Isbn" class="form-control" placeholder="000-0000000" />
+                                            <span asp-validation-for="Isbn" class="text-danger small"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="AnioPublicacion" class="form-label fw-bold">Año</label>
+                                            <input asp-for="AnioPublicacion" class="form-control" type="number" />
+                                            <span asp-validation-for="AnioPublicacion" class="text-danger small"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label class="form-label fw-bold d-block">Disponibilidad</label>
+                                    <div class="form-check form-switch custom-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               name="Estado" id="switchEstado" value="true"
+                                        @(Model.Estado == true ? "checked=\"checked\"" : "")>
+                                        <input type="hidden" name="Estado" value="false" />
+                                        <label class="form-check-label text-muted" for="switchEstado">
+                                            ¿Libro disponible para préstamo?
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card shadow-sm border-0 mb-4">
+                            <div class="card-header bg-secondary text-white p-3">
+                                <h5 class="mb-0"><i class="bi bi-tags me-2"></i>Clasificación y Categorías</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="IdAutor" class="form-label fw-bold">Autor</label>
+                                    <select asp-for="IdAutor" class="form-select" asp-items="ViewBag.IdAutor"></select>
+                                    <span asp-validation-for="IdAutor" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="IdEditorial" class="form-label fw-bold">Editorial</label>
+                                    <select asp-for="IdEditorial" class="form-select" asp-items="ViewBag.IdEditorial"></select>
+                                    <span asp-validation-for="IdEditorial" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="IdCiencia" class="form-label fw-bold">Área del Conocimiento</label>
+                                    <select asp-for="IdCiencia" class="form-select" asp-items="ViewBag.IdCiencia"></select>
+                                    <span asp-validation-for="IdCiencia" class="text-danger small"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="IdIdioma" class="form-label fw-bold">Idioma</label>
+                                            <select asp-for="IdIdioma" class="form-select" asp-items="ViewBag.IdIdioma"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label asp-for="IdTipoBibliografia" class="form-label fw-bold">Formato</label>
+                                            <select asp-for="IdTipoBibliografia" class="form-select" asp-items="ViewBag.IdTipoBibliografia"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mb-5">
+                    <button type="submit" class="btn btn-primary btn-lg shadow">
+                        <i class="bi bi-save2"></i> Actualizar Libro en el Catálogo
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

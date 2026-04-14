@@ -1,54 +1,93 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Usuario
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Editar Usuario";
 }
 
-<h1>Edit</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-primary">Editar Perfil de Usuario</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Volver al Listado
+                </a>
+            </div>
 
-<h4>Usuario</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IdUsuario" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white p-3">
+                    <h5 class="mb-0">Información del Miembro de la Biblioteca</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <input type="hidden" asp-for="IdUsuario" />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Nombre" class="form-label fw-bold">Nombre Completo</label>
+                                    <input asp-for="Nombre" class="form-control" placeholder="Ej. Pedro Martínez" />
+                                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="Cedula" class="form-label fw-bold">Cédula</label>
+                                    <input asp-for="Cedula" class="form-control" placeholder="001-0000000-0" />
+                                    <span asp-validation-for="Cedula" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="NoCarnet" class="form-label fw-bold">No. de Carnet</label>
+                                    <input asp-for="NoCarnet" class="form-control" placeholder="Ej. 20230045" />
+                                    <span asp-validation-for="NoCarnet" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label asp-for="TipoPersona" class="form-label fw-bold">Tipo de Persona</label>
+                                    <select asp-for="TipoPersona" class="form-select">
+                                        <option value="">Seleccione tipo...</option>
+                                        <option value="Estudiante">Estudiante</option>
+                                        <option value="Profesor">Profesor</option>
+                                        <option value="Empleado">Empleado</option>
+                                        <option value="Externo">Externo</option>
+                                    </select>
+                                    <span asp-validation-for="TipoPersona" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted" />
+
+                        <div class="form-group mb-4 text-center">
+                            <label class="form-label fw-bold d-block">Estado de Membresía</label>
+                            <div class="form-check form-switch d-inline-block">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       name="Estado" id="switchEstado" value="true"
+                                @(Model.Estado == true ? "checked=\"checked\"" : "")>
+                                <input type="hidden" name="Estado" value="false" />
+                                <label class="form-check-label text-muted ms-2" for="switchEstado">
+                                    ¿Usuario habilitado para préstamos?
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                                <i class="bi bi-save"></i> Actualizar Usuario
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Cedula" class="control-label"></label>
-                <input asp-for="Cedula" class="form-control" />
-                <span asp-validation-for="Cedula" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NoCarnet" class="control-label"></label>
-                <input asp-for="NoCarnet" class="form-control" />
-                <span asp-validation-for="NoCarnet" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoPersona" class="control-label"></label>
-                <input asp-for="TipoPersona" class="form-control" />
-                <span asp-validation-for="TipoPersona" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
-                <span asp-validation-for="Estado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -1,48 +1,75 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Empleado
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Expediente del Empleado";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-primary">Detalles del Empleado</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Volver al Listado
+                </a>
+            </div>
 
-<div>
-    <h4>Empleado</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cedula)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cedula)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TandaLaboral)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TandaLaboral)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FechaIngreso)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FechaIngreso)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdEmpleado">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Ficha de Identidad Laboral</h5>
+                    <span class="badge bg-light text-dark">ID: @Model.IdEmpleado</span>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-6 border-end">
+                            <h6 class="text-primary fw-bold text-uppercase small mb-3">Datos Personales</h6>
+                            <div class="mb-3">
+                                <label class="text-muted d-block small">Nombre Completo</label>
+                                <span class="fs-5 fw-bold">@Model.Nombre</span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted d-block small">Cédula</label>
+                                <span class="font-monospace">@Model.Cedula</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 ps-md-4">
+                            <h6 class="text-primary fw-bold text-uppercase small mb-3">Información de Nómina</h6>
+                            <div class="mb-3">
+                                <label class="text-muted d-block small">Tanda Laboral</label>
+                                <span class="badge bg-info text-dark">@Model.TandaLaboral</span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted d-block small">Fecha de Ingreso</label>
+                                <span>@(Model.FechaIngreso.HasValue? Model.FechaIngreso.Value.ToString("dd/MM/yyyy") : "No registrada")</span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted d-block small">Estado del Contrato</label>
+                                @if (Model.Estado == true)
+                                {
+                                    <span class="badge bg-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Inactivo</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-light rounded border text-center">
+                        <small class="text-muted">
+                            <i class="bi bi-shield-lock"></i> Información confidencial de uso exclusivo para el departamento de Recursos Humanos de Biblioteca UNAPEC.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white border-top-0 p-3 text-end">
+                    <a asp-action="Edit" asp-route-id="@Model?.IdEmpleado" class="btn btn-primary px-4 shadow-sm">
+                        <i class="bi bi-pencil"></i> Editar Expediente
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,72 +1,99 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Libro
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalles del Libro";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold text-primary mb-0">Información Bibliográfica</h2>
+                    <p class="text-muted small">Consulta detallada del recurso</p>
+                </div>
+                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Volver al Catálogo
+                </a>
+            </div>
 
-<div>
-    <h4>Libro</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Titulo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Titulo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Isbn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Isbn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AnioPublicacion)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AnioPublicacion)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdAutorNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdAutorNavigation.IdAutor)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdCienciaNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdCienciaNavigation.IdCiencia)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdEditorialNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdEditorialNavigation.IdEditorial)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdIdiomaNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdIdiomaNavigation.IdIdioma)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdTipoBibliografiaNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdTipoBibliografiaNavigation.IdTipoBibliografia)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.IdLibro">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="card shadow-sm border-0 mb-4 h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-4">
+                                <i class="bi bi-book text-primary" style="font-size: 5rem;"></i>
+                            </div>
+                            <h3 class="fw-bold text-dark">@Model.Titulo</h3>
+                            <p class="text-muted">ISBN: <span class="font-monospace">@Model.Isbn</span></p>
+                            
+                            <hr />
+                            
+                            <div class="d-grid gap-3">
+                                <div class="p-2 bg-light rounded border text-start">
+                                    <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Año de Publicación</small>
+                                    <span class="fs-5">@Model.AnioPublicacion</span>
+                                </div>
+                                
+                                <div class="p-2 bg-light rounded border text-start">
+                                    <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.7rem;">Estado de Disponibilidad</small>
+                                    @if (Model.Estado == true)
+                                    {
+                                        <span class="badge bg-success py-2 px-3 mt-1">Disponible para Préstamo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger py-2 px-3 mt-1">No Disponible / Prestado</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-7">
+                    <div class="card shadow-sm border-0 h-100">
+                        <div class="card-header bg-dark text-white p-3">
+                            <h5 class="mb-0">Metadatos y Clasificación</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row mb-4">
+                                <div class="col-sm-5 fw-bold text-muted">Autor:</div>
+                                <div class="col-sm-7 fs-5">@Model.IdAutorNavigation?.Nombre @Model.IdAutorNavigation?.Apellido</div>
+                            </div>
+                            <hr class="text-light" />
+                            <div class="row mb-4">
+                                <div class="col-sm-5 fw-bold text-muted">Editorial:</div>
+                                <div class="col-sm-7">@Model.IdEditorialNavigation?.Nombre</div>
+                            </div>
+                            <hr class="text-light" />
+                            <div class="row mb-4">
+                                <div class="col-sm-5 fw-bold text-muted">Área del Conocimiento:</div>
+                                <div class="col-sm-7">
+                                    <span class="badge bg-info text-dark">@Model.IdCienciaNavigation?.Descripcion</span>
+                                </div>
+                            </div>
+                            <hr class="text-light" />
+                            <div class="row mb-4">
+                                <div class="col-sm-5 fw-bold text-muted">Idioma:</div>
+                                <div class="col-sm-7">@Model.IdIdiomaNavigation?.Descripcion</div>
+                            </div>
+                            <hr class="text-light" />
+                            <div class="row mb-4">
+                                <div class="col-sm-5 fw-bold text-muted">Tipo de Bibliografía:</div>
+                                <div class="col-sm-7">
+                                    <span class="badge bg-secondary">@Model.IdTipoBibliografiaNavigation?.Descripcion</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white border-top-0 p-3 text-end">
+                            <a asp-action="Edit" asp-route-id="@Model?.IdLibro" class="btn btn-primary px-4 shadow-sm">
+                                <i class="bi bi-pencil-square"></i> Editar Información
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
