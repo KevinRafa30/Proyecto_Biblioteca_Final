@@ -7,46 +7,67 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Registrar Nueva Editorial</h4>
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h2 class="fw-bold text-primary mb-0">Gestión de Editoriales</h2>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Volver al Listado
+                </a>
+            </div>
+
+            <div class="card rounded-1 border shadow-none">
+                <div class="card-header bg-light border-bottom p-3">
+                    <h6 class="mb-0 fw-bold text-dark text-uppercase small">
+                        <i class="bi bi-building me-2 text-primary"></i>Alta de Empresa Editorial
+                    </h6>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
-                        <h5 class="text-secondary mb-3">Información de la Editorial</h5>
-
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label asp-for="Nombre" class="control-label fw-bold">Nombre de la Empresa Editorial</label>
-                                <input asp-for="Nombre" class="form-control" placeholder="Ej. Editorial Santillana" />
-                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                        <div class="row mb-2">
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Nombre" class="form-label small fw-bold text-muted text-uppercase">Nombre de la Empresa Editorial</label>
+                                <input asp-for="Nombre" class="form-control rounded-1 border-secondary-subtle" placeholder="Ej. Editorial Santillana" />
+                                <span asp-validation-for="Nombre" class="text-danger small"></span>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Pais" class="control-label fw-bold">País de Origen</label>
-                                <input asp-for="Pais" class="form-control" placeholder="Ej. República Dominicana" />
-                                <span asp-validation-for="Pais" class="text-danger"></span>
+                            <div class="col-md-7 mb-3">
+                                <label asp-for="Pais" class="form-label small fw-bold text-muted text-uppercase">País de Sede Central</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light rounded-start-1 border-secondary-subtle">
+                                        <i class="bi bi-geo-alt"></i>
+                                    </span>
+                                    <input asp-for="Pais" class="form-control rounded-end-1 border-secondary-subtle" placeholder="Ej. República Dominicana" />
+                                </div>
+                                <span asp-validation-for="Pais" class="text-danger small"></span>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Estado" class="control-label fw-bold">Estado de Disponibilidad</label>
-                                <select asp-for="Estado" class="form-select">
-                                    <option value="true">Activa</option>
-                                    <option value="false">Inactiva</option>
+
+                            <div class="col-md-5 mb-3">
+                                <label asp-for="Estado" class="form-label small fw-bold text-muted text-uppercase">Estatus Comercial</label>
+                                <select asp-for="Estado" class="form-select rounded-1 border-secondary-subtle">
+                                    <option value="true">Activa (Habilitada)</option>
+                                    <option value="false">Inactiva (Deshabilitada)</option>
                                 </select>
-                                <span asp-validation-for="Estado" class="text-danger"></span>
+                                <span asp-validation-for="Estado" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-outline-secondary">Volver al Listado</a>
-                            <button type="submit" class="btn btn-primary px-4 fw-bold">Guardar Editorial</button>
+                        <hr class="my-4 opacity-50" />
+
+                        <div class="text-end pt-2">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-1 fw-bold border-0 shadow-sm">
+                                <i class="bi bi-save2 me-1"></i> Guardar Editorial
+                            </button>
                         </div>
                     </form>
                 </div>
+            </div>
+
+            <div class="mt-3 text-center">
+                <p class="text-muted small fst-italic">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Esta editorial estará disponible para clasificar los recursos bibliográficos en el catálogo.
+                </p>
             </div>
         </div>
     </div>

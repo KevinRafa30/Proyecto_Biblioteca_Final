@@ -6,61 +6,68 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-7">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold text-primary">Información del Autor</h2>
-                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
-                    <i class="bi bi-arrow-left"></i> Volver al Listado
+        <div class="col-md-8">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h2 class="fw-bold text-primary mb-0">Perfil del Autor</h2>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Volver al Listado
                 </a>
             </div>
 
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Perfil del Autor</h5>
-                    <span class="badge bg-secondary">ID: @Model.IdAutor</span>
-                </div>
-                <div class="card-body p-4">
-                    <div class="row mb-4">
-                        <div class="col-sm-4 fw-bold text-muted text-uppercase small">Nombre Completo:</div>
-                        <div class="col-sm-8 fs-4 fw-bold text-dark">
-                            @Model.Nombre @Model.Apellido
+            <div class="card rounded-1 border shadow-none overflow-hidden">
+                <div class="row g-0">
+                    <div class="col-md-4 bg-light d-flex align-items-center justify-content-center p-4 border-end">
+                        <div class="text-center">
+                            <img src="https://source.unsplash.com/300x300/?portrait,writer,@Model.Apellido"
+                                 class="img-fluid rounded-1 border shadow-sm mb-3"
+                                 style="width: 180px; height: 180px; object-fit: cover; background-color: #fff;"
+                                 alt="Retrato"
+                                 onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=@(Model.Nombre)+@(Model.Apellido)&background=003366&color=fff&size=180&bold=true'">
+                            
+                            <div class="badge rounded-pill bg-dark-subtle text-dark px-3 py-1" style="font-size: 0.7rem;">
+                                ID REGISTRO: #@Model.IdAutor
+                            </div>
                         </div>
                     </div>
 
-                    <hr class="text-light" />
+                    <div class="col-md-8">
+                        <div class="card-body p-4">
+                            <div class="mb-4">
+                                <label class="small fw-bold text-muted text-uppercase d-block mb-1">Nombre Completo</label>
+                                <h3 class="fw-bold text-dark mb-0">@Model.Nombre @Model.Apellido</h3>
+                            </div>
 
-                    <div class="row mb-4">
-                        <div class="col-sm-4 fw-bold text-muted text-uppercase small">Nacionalidad:</div>
-                        <div class="col-sm-8 fs-5">
-                            <i class="bi bi-globe text-primary"></i> @Model.Nacionalidad
+                            <div class="row mb-4">
+                                <div class="col-sm-6">
+                                    <label class="small fw-bold text-muted text-uppercase d-block mb-1">Nacionalidad</label>
+                                    <div class="fs-5 text-dark">
+                                        <i class="bi bi-globe-americas text-primary me-2"></i>@Model.Nacionalidad
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="small fw-bold text-muted text-uppercase d-block mb-1">Estatus</label>
+                                    @if (Model.Estado == true)
+                                    {
+                                        <span class="text-success fw-bold d-block">
+                                            <i class="bi bi-check-circle-fill me-1"></i> Autor Activo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger fw-bold d-block">
+                                            <i class="bi bi-x-circle-fill me-1"></i> Inactivo
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer bg-transparent border-top p-4 text-end">
+                            <a asp-action="Edit" asp-route-id="@Model?.IdAutor" class="btn btn-primary px-4 rounded-1 fw-bold">
+                                <i class="bi bi-pencil-square me-1"></i> Editar Perfil
+                            </a>
                         </div>
                     </div>
-
-                    <hr class="text-light" />
-
-                    <div class="row mb-2 align-items-center">
-                        <div class="col-sm-4 fw-bold text-muted text-uppercase small">Estado Actual:</div>
-                        <div class="col-sm-8">
-                            @if (Model.Estado == true)
-                            {
-                                <span class="badge bg-success py-2 px-3">
-                                    <i class="bi bi-check-circle-fill"></i> Autor Activo
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger py-2 px-3">
-                                    <i class="bi bi-x-circle-fill"></i> Autor Inactivo
-                                </span>
-                            }
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-footer bg-white border-top-0 p-3 text-end">
-                    <a asp-action="Edit" asp-route-id="@Model?.IdAutor" class="btn btn-primary px-4 shadow-sm">
-                        <i class="bi bi-pencil"></i> Editar Información
-                    </a>
                 </div>
             </div>
         </div>

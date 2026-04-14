@@ -6,67 +6,82 @@
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Registrar Nuevo Empleado</h4>
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h2 class="fw-bold text-primary mb-0">Gestión de Personal</h2>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Volver al Listado
+                </a>
+            </div>
+
+            <div class="card rounded-1 border shadow-none">
+                <div class="card-header bg-light border-bottom p-3">
+                    <h6 class="mb-0 fw-bold text-dark text-uppercase small">
+                        <i class="bi bi-person-badge me-2 text-primary"></i>Alta de Nuevo Colaborador
+                    </h6>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
-                        <h5 class="text-secondary mb-3">Datos Personales</h5>
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label asp-for="Nombre" class="control-label fw-bold">Nombre Completo</label>
-                                <input asp-for="Nombre" class="form-control" placeholder="Ej. María Rodríguez" />
-                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                        <div class="row mb-4">
+                            <div class="col-md-8 mb-3">
+                                <label asp-for="Nombre" class="form-label small fw-bold text-muted text-uppercase">Nombre Completo del Empleado</label>
+                                <input asp-for="Nombre" class="form-control rounded-1 border-secondary-subtle" placeholder="Ej. María Rodríguez" />
+                                <span asp-validation-for="Nombre" class="text-danger small"></span>
                             </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Cedula" class="control-label fw-bold">Cédula de Identidad</label>
-                                <input asp-for="Cedula" class="form-control" placeholder="Ej. 001-0000000-1" />
-                                <span asp-validation-for="Cedula" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <hr class="my-4" />
-
-                        <h5 class="text-secondary mb-3">Información Laboral</h5>
-                        <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label asp-for="TandaLaboral" class="control-label fw-bold">Tanda Laboral</label>
-                                <select asp-for="TandaLaboral" class="form-select">
-                                    <option value="">-- Seleccione --</option>
-                                    <option value="Matutina">Matutina</option>
-                                    <option value="Vespertina">Vespertina</option>
-                                    <option value="Nocturna">Nocturna</option>
+                                <label asp-for="Cedula" class="form-label small fw-bold text-muted text-uppercase">Cédula de Identidad</label>
+                                <input asp-for="Cedula" class="form-control rounded-1 border-secondary-subtle font-monospace" placeholder="001-0000000-1" />
+                                <span asp-validation-for="Cedula" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 opacity-50" />
+
+                        <div class="row mb-4">
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="TandaLaboral" class="form-label small fw-bold text-muted text-uppercase">Tanda Laboral</label>
+                                <select asp-for="TandaLaboral" class="form-select rounded-1 border-secondary-subtle">
+                                    <option value="">-- Seleccionar --</option>
+                                    <option value="Matutina">Matutina (Mañana)</option>
+                                    <option value="Vespertina">Vespertina (Tarde)</option>
+                                    <option value="Nocturna">Nocturna (Noche)</option>
                                 </select>
-                                <span asp-validation-for="TandaLaboral" class="text-danger"></span>
+                                <span asp-validation-for="TandaLaboral" class="text-danger small"></span>
                             </div>
+
                             <div class="col-md-4 mb-3">
-                                <label asp-for="FechaIngreso" class="control-label fw-bold">Fecha de Ingreso</label>
-                                <input asp-for="FechaIngreso" type="date" class="form-control" />
-                                <span asp-validation-for="FechaIngreso" class="text-danger"></span>
+                                <label asp-for="FechaIngreso" class="form-label small fw-bold text-muted text-uppercase">Fecha de Ingreso</label>
+                                <input asp-for="FechaIngreso" type="date" class="form-control rounded-1 border-secondary-subtle" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="FechaIngreso" class="text-danger small"></span>
                             </div>
+
                             <div class="col-md-4 mb-3">
-                                <label asp-for="Estado" class="control-label fw-bold">Estado del Empleado</label>
-                                <select asp-for="Estado" class="form-select">
-                                    <option value="true">Activo</option>
-                                    <option value="false">Inactivo</option>
+                                <label asp-for="Estado" class="form-label small fw-bold text-muted text-uppercase">Estatus Laboral</label>
+                                <select asp-for="Estado" class="form-select rounded-1 border-secondary-subtle">
+                                    <option value="true">Activo / Operativo</option>
+                                    <option value="false">Inactivo / Licencia</option>
                                 </select>
-                                <span asp-validation-for="Estado" class="text-danger"></span>
+                                <span asp-validation-for="Estado" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-outline-secondary">Volver al Listado</a>
-                            <button type="submit" class="btn btn-primary px-4 fw-bold">Guardar Empleado</button>
+                        <div class="text-end pt-3 border-top">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-1 fw-bold border-0">
+                                <i class="bi bi-save2 me-1"></i> Registrar Empleado
+                            </button>
                         </div>
                     </form>
                 </div>
+            </div>
+
+            <div class="mt-3 text-center">
+                <p class="text-muted small">
+                    <i class="bi bi-shield-lock me-1"></i>
+                    Este registro quedará vinculado a las transacciones de préstamos y devoluciones realizadas por el personal.
+                </p>
             </div>
         </div>
     </div>

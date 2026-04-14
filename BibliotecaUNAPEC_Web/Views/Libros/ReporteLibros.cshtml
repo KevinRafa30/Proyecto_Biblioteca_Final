@@ -2,7 +2,6 @@
 @{
     Layout = null; //Eliminar menús y barras laterales de la web
 }
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,7 +13,8 @@
         .header-section { border-bottom: 2px solid #004691; margin-bottom: 25px; padding-bottom: 10px; }
         .footer-info { font-size: 10px; color: #555; }
         table { width: 100%; border-collapse: collapse; }
-        th { background-color: #f8f9fa !important; color: #333; }
+        th { background-color: #f8f9fa !important; color: #333; text-transform: uppercase; font-size: 11px; }
+        td { vertical-align: middle; }
     </style>
 </head>
 <body>
@@ -36,24 +36,24 @@
             <tr>
                 <th>Título</th>
                 <th>ISBN</th>
-                <th>Año</th>
+                <th class="text-center">Año</th>
                 <th>Autor</th>
                 <th>Ciencia</th>
                 <th>Idioma</th>
-                <th>Estado</th>
+                <th class="text-center">Estado</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Titulo</td>
-                    <td>@item.Isbn</td>
-                    <td>@item.AnioPublicacion</td>
+                    <td class="fw-bold">@item.Titulo</td>
+                    <td class="font-monospace">@item.Isbn</td>
+                    <td class="text-center">@item.AnioPublicacion</td>
                     <td>@(item.IdAutorNavigation?.Nombre ?? "N/A")</td>
                     <td>@(item.IdCienciaNavigation?.Descripcion ?? "N/A")</td>
                     <td>@(item.IdIdiomaNavigation?.Descripcion ?? "N/A")</td>
-                    <td>
+                    <td class="text-center fw-bold">
                         @if (item.Estado == true)
                         {
                             <span class="text-success">Disponible</span>
@@ -68,8 +68,8 @@
         </tbody>
     </table>
 
-    <div class="mt-4">
-        <p class="small text-muted">** Fin del Reporte **</p>
+    <div class="mt-4 text-center">
+        <p class="small text-muted text-uppercase" style="letter-spacing: 2px;">*** Fin del Reporte ***</p>
     </div>
 </body>
 </html>

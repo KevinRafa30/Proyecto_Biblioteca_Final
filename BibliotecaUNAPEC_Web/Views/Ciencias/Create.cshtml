@@ -7,35 +7,54 @@
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Registrar Nueva Ciencia / Área</h4>
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h2 class="fw-bold text-primary mb-0">Gestión de Áreas</h2>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Volver al Listado
+                </a>
+            </div>
+
+            <div class="card rounded-1 border shadow-none">
+                <div class="card-header bg-light border-bottom p-3">
+                    <h6 class="mb-0 fw-bold text-dark text-uppercase small">
+                        <i class="bi bi-book-half me-2 text-primary"></i>Nueva Clasificación de Ciencia
+                    </h6>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
-                        <div class="form-group mb-3">
-                            <label asp-for="Descripcion" class="control-label fw-bold">Nombre de la Ciencia o Área</label>
-                            <input asp-for="Descripcion" class="form-control" placeholder="Ej. Informática, Medicina, Historia..." />
-                            <span asp-validation-for="Descripcion" class="text-danger"></span>
+                        <div class="mb-4">
+                            <label asp-for="Descripcion" class="form-label small fw-bold text-muted text-uppercase">Nombre de la Ciencia o Área</label>
+                            <input asp-for="Descripcion" class="form-control rounded-1 border-secondary-subtle" placeholder="Ej. Informática, Medicina, Historia..." />
+                            <span asp-validation-for="Descripcion" class="text-danger small"></span>
                         </div>
 
-                        <div class="form-group mb-4">
-                            <label asp-for="Estado" class="control-label fw-bold">Estado en el Sistema</label>
-                            <select asp-for="Estado" class="form-select">
-                                <option value="true">Activa</option>
-                                <option value="false">Inactiva</option>
+                        <div class="mb-4">
+                            <label asp-for="Estado" class="form-label small fw-bold text-muted text-uppercase">Estado en el Sistema</label>
+                            <select asp-for="Estado" class="form-select rounded-1 border-secondary-subtle">
+                                <option value="true">Activa / Disponible</option>
+                                <option value="false">Inactiva / Restringida</option>
                             </select>
-                            <span asp-validation-for="Estado" class="text-danger"></span>
+                            <span asp-validation-for="Estado" class="text-danger small"></span>
                         </div>
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-outline-secondary">Volver al Listado</a>
-                            <button type="submit" class="btn btn-primary px-4 fw-bold">Guardar Ciencia</button>
+                        <hr class="my-4 opacity-50" />
+
+                        <div class="text-end pt-2">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-1 fw-bold border-0">
+                                <i class="bi bi-save2 me-1"></i> Guardar Ciencia
+                            </button>
                         </div>
                     </form>
                 </div>
+            </div>
+
+            <div class="mt-3 text-center">
+                <p class="text-muted small">
+                    <i class="bi bi-lightbulb me-1"></i>
+                    Esta categoría servirá para agrupar los libros en el catálogo según su especialidad.
+                </p>
             </div>
         </div>
     </div>

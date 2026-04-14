@@ -1,97 +1,90 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Libro
 
 @{
-    ViewData["Title"] = "Registrar Libro";
+    ViewData["Title"] = "Nuevo Libro";
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Registrar Nuevo Libro</h4>
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <h2 class="fw-bold text-primary mb-0">Registrar Libro en Catálogo</h2>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i> Volver al Catálogo
+                </a>
+            </div>
+
+            <div class="card rounded-1 border shadow-none">
+                <div class="card-header bg-light border-bottom p-3">
+                    <h6 class="mb-0 fw-bold text-dark text-uppercase small">
+                        <i class="bi bi-journal-plus me-2 text-primary"></i>Ingreso de Nuevo Recurso
+                    </h6>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
 
-                        <h5 class="text-secondary mb-3">Datos Generales</h5>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Titulo" class="control-label fw-bold">Título del Libro</label>
-                                <input asp-for="Titulo" class="form-control" placeholder="Ej. Cien Años de Soledad" />
-                                <span asp-validation-for="Titulo" class="text-danger"></span>
+                        <div class="row mb-4">
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Titulo" class="form-label small fw-bold text-muted text-uppercase">Título Completo del Libro</label>
+                                <input asp-for="Titulo" class="form-control rounded-1 border-secondary-subtle" placeholder="Ej. Cien años de soledad" />
+                                <span asp-validation-for="Titulo" class="text-danger small"></span>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Isbn" class="control-label fw-bold">ISBN</label>
-                                <input asp-for="Isbn" class="form-control" placeholder="Ej. 978-0307474728" />
-                                <span asp-validation-for="Isbn" class="text-danger"></span>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="AnioPublicacion" class="control-label fw-bold">Año de Publicación</label>
-                                <input asp-for="AnioPublicacion" class="form-control" type="number" placeholder="Ej. 1967" />
-                                <span asp-validation-for="AnioPublicacion" class="text-danger"></span>
+                            <div class="col-md-8 mb-3">
+                                <label asp-for="Isbn" class="form-label small fw-bold text-muted text-uppercase">ISBN (Identificador Internacional)</label>
+                                <input asp-for="Isbn" class="form-control rounded-1 font-monospace" placeholder="978-0000000000" />
+                                <span asp-validation-for="Isbn" class="text-danger small"></span>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Estado" class="control-label fw-bold">Estado Inicial en Inventario</label>
-                                <select asp-for="Estado" class="form-select">
-                                    <option value="true">Disponible</option>
-                                    <option value="false">No Disponible</option>
-                                </select>
-                                <span asp-validation-for="Estado" class="text-danger"></span>
-                            </div>
-                        </div>
 
-                        <hr class="my-4" />
-
-                        <h5 class="text-secondary mb-3">Clasificación y Detalles</h5>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="IdAutor" class="control-label fw-bold">Autor</label>
-                                <select asp-for="IdAutor" class="form-select" asp-items="ViewBag.IdAutor">
-                                    <option value="">-- Seleccione un Autor --</option>
-                                </select>
-                                <span asp-validation-for="IdAutor" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="IdEditorial" class="control-label fw-bold">Editorial</label>
-                                <select asp-for="IdEditorial" class="form-select" asp-items="ViewBag.IdEditorial">
-                                    <option value="">-- Seleccione una Editorial --</option>
-                                </select>
-                                <span asp-validation-for="IdEditorial" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label asp-for="IdCiencia" class="control-label fw-bold">Ciencia / Categoría</label>
-                                <select asp-for="IdCiencia" class="form-select" asp-items="ViewBag.IdCiencia">
-                                    <option value="">-- Seleccione --</option>
-                                </select>
-                                <span asp-validation-for="IdCiencia" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label asp-for="IdIdioma" class="control-label fw-bold">Idioma</label>
-                                <select asp-for="IdIdioma" class="form-select" asp-items="ViewBag.IdIdioma">
-                                    <option value="">-- Seleccione --</option>
-                                </select>
-                                <span asp-validation-for="IdIdioma" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label asp-for="IdTipoBibliografia" class="control-label fw-bold">Formato Bibliográfico</label>
-                                <select asp-for="IdTipoBibliografia" class="form-select" asp-items="ViewBag.IdTipoBibliografia">
-                                    <option value="">-- Seleccione --</option>
-                                </select>
-                                <span asp-validation-for="IdTipoBibliografia" class="text-danger"></span>
+                                <label asp-for="AnioPublicacion" class="form-label small fw-bold text-muted text-uppercase">Año de Edición</label>
+                                <input asp-for="AnioPublicacion" class="form-control rounded-1" type="number" placeholder="2024" />
+                                <span asp-validation-for="AnioPublicacion" class="text-danger small"></span>
                             </div>
                         </div>
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-outline-secondary">Volver al Catálogo</a>
-                            <button type="submit" class="btn btn-primary px-4 fw-bold">Guardar Libro</button>
+                        <hr class="my-4 opacity-50" />
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="IdAutor" class="form-label small fw-bold text-muted text-uppercase">Autor Responsable</label>
+                                <select asp-for="IdAutor" class="form-select rounded-1 border-secondary-subtle" asp-items="ViewBag.IdAutor">
+                                    <option value="">-- Seleccionar autor --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="IdEditorial" class="form-label small fw-bold text-muted text-uppercase">Editorial</label>
+                                <select asp-for="IdEditorial" class="form-select rounded-1 border-secondary-subtle" asp-items="ViewBag.IdEditorial">
+                                    <option value="">-- Seleccionar editorial --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="IdCiencia" class="form-label small fw-bold text-muted text-uppercase">Área del Conocimiento / Ciencia</label>
+                                <select asp-for="IdCiencia" class="form-select rounded-1 border-secondary-subtle" asp-items="ViewBag.IdCiencia">
+                                    <option value="">-- Seleccionar área técnica --</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="IdIdioma" class="form-label small fw-bold text-muted text-uppercase">Idioma del Recurso</label>
+                                <select asp-for="IdIdioma" class="form-select rounded-1 border-secondary-subtle" asp-items="ViewBag.IdIdioma"></select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="IdTipoBibliografia" class="form-label small fw-bold text-muted text-uppercase">Formato de Obra</label>
+                                <select asp-for="IdTipoBibliografia" class="form-select rounded-1 border-secondary-subtle" asp-items="ViewBag.IdTipoBibliografia"></select>
+                            </div>
+                        </div>
+
+                        <input type="hidden" asp-for="Estado" value="true" />
+
+                        <div class="text-end pt-3 border-top mt-2">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-1 fw-bold border-0">
+                                <i class="bi bi-save2 me-1"></i> Registrar en Inventario
+                            </button>
                         </div>
                     </form>
                 </div>
