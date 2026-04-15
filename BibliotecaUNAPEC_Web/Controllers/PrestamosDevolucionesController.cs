@@ -23,10 +23,11 @@ namespace BibliotecaUNAPEC_Web.Controllers
         public async Task<IActionResult> Index()
         {
             var transacciones = await _context.PrestamosDevoluciones
+                .Include(p => p.IdLibroNavigation)  
+                .Include(p => p.IdUsuarioNavigation) 
                 .Include(p => p.IdEmpleadoNavigation)
-                .Include(p => p.IdLibroNavigation)
-                .Include(p => p.IdUsuarioNavigation)
                 .ToListAsync();
+
             return View(transacciones);
         }
 
@@ -154,6 +155,28 @@ namespace BibliotecaUNAPEC_Web.Controllers
             return View(prestamo);
         }
 
+        // GET: PrestamosDevoluciones/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Usamos .Include para traer toda la información relacionada
+            var prestamo = await _context.PrestamosDevoluciones
+                .Include(p => p.IdEmpleadoNavigation)
+                .Include(p => p.IdLibroNavigation)
+                .Include(p => p.IdUsuarioNavigation)
+                .FirstOrDefaultAsync(m => m.IdTransaccion == id);
+
+            if (prestamo == null)
+            {
+                return NotFound();
+            }
+
+            return View(prestamo);
+        }
         private bool PrestamoExists(int id)
         {
             return _context.PrestamosDevoluciones.Any(e => e.IdTransaccion == id);

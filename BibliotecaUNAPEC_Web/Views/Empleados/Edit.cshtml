@@ -1,81 +1,91 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Empleado
 
 @{
-    ViewData["Title"] = "Eliminar Empleado";
+    ViewData["Title"] = "Editar Empleado";
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold text-danger">Eliminar Perfil de Empleado</h2>
+                <h2 class="fw-bold text-primary">Editar Perfil de Empleado</h2>
                 <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
-                    <i class="bi bi-arrow-left"></i> Volver al Personal
+                    <i class="bi bi-arrow-left"></i> Volver al Listado
                 </a>
             </div>
 
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white p-3">
-                    <h5 class="mb-0">¿Confirmar desvinculación de este empleado?</h5>
+                    <h5 class="mb-0">Información del Colaborador</h5>
                 </div>
                 <div class="card-body p-4">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold text-muted">Nombre Completo</label>
-                                <div class="form-control-plaintext border-bottom">@Model.Nombre</div>
-                            </div>
+                    <form asp-action="Edit">
+                        @* SEGURO 1: Resumen de errores del servidor *@
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 shadow-sm mb-3 fw-bold small"></div>
 
-                            <div class="mb-3">
-                                <label class="form-label fw-bold text-muted">Cédula de Identidad</label>
-                                <div class="form-control-plaintext border-bottom">@Model.Cedula</div>
-                            </div>
-                        </div>
+                        @* ID OCULTO: Indispensable para que el controlador sepa a quién actualizar *@
+                        <input type="hidden" asp-for="IdEmpleado" />
 
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold text-muted">Tanda Laboral</label>
-                                <div class="form-control-plaintext border-bottom">@Model.TandaLaboral</div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Nombre" class="form-label fw-bold">Nombre Completo</label>
+                                    @* SEGURO 2: Límite de 100 según el Snapshot de la DB *@
+                                    <input asp-for="Nombre" class="form-control" placeholder="Ej. María Rodríguez" maxlength="100" />
+                                    <span asp-validation-for="Nombre" class="text-danger small"></span>
+                                </div>
                             </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold text-muted">Fecha de Ingreso</label>
-                                <div class="form-control-plaintext border-bottom">
-                                    @* Corrección para DateOnly? *@
-                                    @(Model.FechaIngreso?.ToString("dd/MM/yyyy") ?? "No registrada")
+                            <div class="col-md-4">
+                                <div class="form-group mb-3">
+                                    <label asp-for="Cedula" class="form-label fw-bold">Cédula (Solo números)</label>
+                                    @* SEGURO 3: Blindaje contra letras y límite de 11 *@
+                                    <input asp-for="Cedula" class="form-control font-monospace"
+                                           placeholder="Ej. 00123456789"
+                                           maxlength="11"
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                    <span asp-validation-for="Cedula" class="text-danger small"></span>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <hr class="my-4 text-muted" />
-
-                    <div class="form-group mb-4 text-center">
-                        <label class="form-label fw-bold d-block text-muted">Estado del Empleado</label>
-                        @if (Model.Estado == true)
-                        {
-                            <span class="badge bg-success py-2 px-3">Activo en Nómina</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger py-2 px-3">Inactivo</span>
-                        }
-                    </div>
-
-                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center" role="alert">
-                        <i class="bi bi-exclamation-octagon-fill me-2 fs-4"></i>
-                        <div>
-                            <strong>Advertencia:</strong> Esta acción eliminará permanentemente los registros laborales de este empleado en el sistema.
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="TandaLaboral" class="form-label fw-bold">Tanda Laboral</label>
+                                    @* SEGURO 4: Select para evitar textos inválidos o muy largos *@
+                                    <select asp-for="TandaLaboral" class="form-select">
+                                        <option value="">-- Seleccionar --</option>
+                                        <option value="Matutina">Matutina (Mañana)</option>
+                                        <option value="Vespertina">Vespertina (Tarde)</option>
+                                        <option value="Nocturna">Nocturna (Noche)</option>
+                                    </select>
+                                    <span asp-validation-for="TandaLaboral" class="text-danger small"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label asp-for="FechaIngreso" class="form-label fw-bold">Fecha de Ingreso</label>
+                                    @* Se usa type="date" para asegurar el formato de fecha *@
+                                    <input asp-for="FechaIngreso" type="date" class="form-control" />
+                                    <span asp-validation-for="FechaIngreso" class="text-danger small"></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <form asp-action="Delete">
-                        @* Es vital que el name sea "id" para que el controlador lo reciba *@
-                        <input type="hidden" name="id" value="@Model.IdEmpleado" />
+                        <hr class="my-4 text-muted" />
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-danger btn-lg shadow-sm">
-                                <i class="bi bi-person-x"></i> Confirmar Eliminación Permanente
+                        <div class="form-group mb-4 text-center">
+                            <label asp-for="Estado" class="form-label fw-bold d-block text-muted text-uppercase small">Estatus Laboral</label>
+                            <select asp-for="Estado" class="form-select w-50 mx-auto rounded-1 border-secondary-subtle">
+                                <option value="true">Activo / Operativo</option>
+                                <option value="false">Inactivo / Licencia</option>
+                            </select>
+                            <span asp-validation-for="Estado" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm fw-bold">
+                                <i class="bi bi-save"></i> Guardar Cambios
                             </button>
                         </div>
                     </form>
@@ -84,3 +94,10 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @* SEGURO 5: Scripts que bloquean el botón si hay errores en el UI *@
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

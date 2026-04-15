@@ -28,12 +28,20 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                <td class="align-middle fw-bold">@item.IdLibroNavigation.Titulo</td>
-                                <td class="align-middle">@item.IdUsuarioNavigation.Nombre</td>
-                                <td class="align-middle">@item.FechaPrestamo</td>
-                                <td class="align-middle">@item.CantidadDias días</td>
+                                @* SEGURO: Usamos ?. y ?? para evitar que la vista explote si el objeto relacionado es null *@
+                                <td class="align-middle fw-bold">
+                                    @(item.IdLibroNavigation?.Titulo ?? "Libro no especificado")
+                                </td>
                                 <td class="align-middle">
-                                    @* Evaluación del estado de la transacción *@
+                                    @(item.IdUsuarioNavigation?.Nombre ?? "Usuario no especificado")
+                                </td>
+                                <td class="align-middle">
+                                    @item.FechaPrestamo
+                                </td>
+                                <td class="align-middle">
+                                    @item.CantidadDias días
+                                </td>
+                                <td class="align-middle">
                                     @if (item.FechaDevolucion == null)
                                     {
                                         <span class="badge bg-warning text-dark py-2 px-3">Pendiente / En Uso</span>
@@ -47,7 +55,6 @@
                                     <div class="btn-group" role="group">
                                         @if (item.FechaDevolucion == null)
                                         {
-                                            @* Utilizarla llave correcta: IdTransaccion *@
                                             <a asp-action="Edit" asp-route-id="@item.IdTransaccion" class="btn btn-sm btn-success fw-bold">Procesar Devolución</a>
                                         }
                                         <a asp-action="Details" asp-route-id="@item.IdTransaccion" class="btn btn-sm btn-outline-secondary">Ver Detalles</a>
