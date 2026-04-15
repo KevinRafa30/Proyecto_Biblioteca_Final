@@ -1,39 +1,67 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Editoriale
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Eliminar Editorial";
 }
 
-<h1>Delete</h1>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold text-danger">Eliminar Editorial</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Volver al Listado
+                </a>
+            </div>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Editoriale</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Nombre)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Pais)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Pais)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Estado)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Estado)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="IdEditorial" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white p-3">
+                    <h5 class="mb-0">¿Confirmar eliminación de la editorial?</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted">Nombre de la Editorial</label>
+                        <div class="form-control-plaintext border-bottom">@Model.Nombre</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted">País de Origen</label>
+                        <div class="form-control-plaintext border-bottom">@Model.Pais</div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-bold d-block text-muted">Estado de Operación</label>
+                        @if (Model.Estado == true)
+                        {
+                            <span class="badge bg-success py-2 px-3">Activa</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger py-2 px-3">Inactiva</span>
+                        }
+                    </div>
+
+                    <hr class="text-muted" />
+
+                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                        <div>
+                            <strong>Atención:</strong> Esta acción eliminará permanentemente la editorial de la base de datos. Verifique que no existan registros dependientes.
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete">
+                        @* Pasamos el ID con el nombre 'id' para que el Controller lo reciba correctamente *@
+                        <input type="hidden" name="id" value="@Model.IdEditorial" />
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-danger btn-lg shadow-sm">
+                                <i class="bi bi-trash"></i> Confirmar Eliminación
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

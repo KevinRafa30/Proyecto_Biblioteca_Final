@@ -1,59 +1,62 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Editoriale
 
 @{
-    ViewData["Title"] = "Editar Editorial";
+    ViewData["Title"] = "Eliminar Editorial";
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold text-primary">Editar Editorial</h2>
-                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">Volver al Listado</a>
+                <h2 class="fw-bold text-danger">Eliminar Editorial</h2>
+                <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
+                    <i class="bi bi-arrow-left"></i> Volver al Listado
+                </a>
             </div>
 
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white p-3">
-                    <h5 class="mb-0">Información de la Editorial</h5>
+                    <h5 class="mb-0">¿Confirmar eliminación de la editorial?</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        <input type="hidden" asp-for="IdEditorial" />
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-muted">Nombre de la Editorial</label>
+                        <div class="form-control-plaintext border-bottom">@Model.Nombre</div>
+                    </div>
 
-                        <div class="form-group mb-3">
-                            <label asp-for="Nombre" class="form-label fw-bold">Nombre de la Editorial</label>
-                            <input asp-for="Nombre" class="form-control" placeholder="Ej. Pearson, Santillana..." />
-                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted">País de Origen</label>
+                        <div class="form-control-plaintext border-bottom">@Model.Pais</div>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-bold d-block text-muted">Estado de Operación</label>
+                        @if (Model.Estado == true)
+                        {
+                            <span class="badge bg-success py-2 px-3">Activa</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger py-2 px-3">Inactiva</span>
+                        }
+                    </div>
+
+                    <hr class="text-muted" />
+
+                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                        <div>
+                            <strong>Atención:</strong> Esta acción eliminará permanentemente la editorial. Verifique que no existan libros vinculados para evitar errores de integridad.
                         </div>
+                    </div>
 
-                        <div class="form-group mb-4">
-                            <label asp-for="Pais" class="form-label fw-bold">País de Origen</label>
-                            <input asp-for="Pais" class="form-control" placeholder="Ej. México, España, Rep. Dom..." />
-                            <span asp-validation-for="Pais" class="text-danger small"></span>
-                        </div>
-
-                        <div class="form-group mb-4">
-                            <label class="form-label fw-bold d-block">Estado de Operación</label>
-                            <div class="form-check form-switch custom-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                       name="Estado" id="switchEstado" value="true"
-                                @(Model.Estado == true ? "checked=\"checked\"" : "")>
-                                
-                                @* Campo oculto para que el servidor reciba 'false' si el switch está apagado *@
-                                <input type="hidden" name="Estado" value="false" />
-                                
-                                <label class="form-check-label text-muted" for="switchEstado">
-                                    Editorial activa para el catálogo
-                                </label>
-                            </div>
-                        </div>
-
-                        <hr class="text-muted" />
+                    <form asp-action="Delete">
+                        @* Pasamos el IdEditorial al controlador *@
+                        <input type="hidden" name="id" value="@Model.IdEditorial" />
 
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
-                                <i class="bi bi-save"></i> Guardar Cambios
+                            <button type="submit" class="btn btn-danger btn-lg shadow-sm">
+                                <i class="bi bi-trash"></i> Confirmar Eliminación
                             </button>
                         </div>
                     </form>
@@ -62,9 +65,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
