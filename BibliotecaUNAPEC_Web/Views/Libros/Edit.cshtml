@@ -19,6 +19,7 @@
                 <input type="hidden" asp-for="IdLibro" />
 
                 <div class="row">
+                    @* COLUMNA IZQUIERDA: Datos Generales *@
                     <div class="col-md-6 mb-4">
                         <div class="card rounded-1 border shadow-none h-100">
                             <div class="card-header bg-light border-bottom p-3">
@@ -51,7 +52,7 @@
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" role="switch"
                                                name="Estado" id="switchEstado" value="true"
-                                        @(Model.Estado == true ? "checked=\"checked\"" : "")>
+                                               @(Model.Estado == true ? "checked=\"checked\"" : "")>
                                         <input type="hidden" name="Estado" value="false" />
                                         <label class="form-check-label text-dark" for="switchEstado">
                                             Habilitar para préstamo público
@@ -62,6 +63,7 @@
                         </div>
                     </div>
 
+                    @* COLUMNA DERECHA: Clasificación *@
                     <div class="col-md-6 mb-4">
                         <div class="card rounded-1 border shadow-none h-100">
                             <div class="card-header bg-light border-bottom p-3">
@@ -103,10 +105,18 @@
                     </div>
                 </div>
 
-                <div class="text-end mb-5">
-                    <button type="submit" class="btn btn-primary btn-lg px-5 rounded-1 fw-bold border-0">
-                        <i class="bi bi-check-lg me-1"></i> Guardar Cambios
-                    </button>
+                @* SECCIÓN DE ACCIONES: Guardar y Eliminar apilados *@
+                <div class="row justify-content-center mt-2">
+                    <div class="col-md-6">
+                        <div class="d-grid gap-2 mb-5">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm fw-bold">
+                                <i class="bi bi-check-lg me-1"></i> Guardar Cambios
+                            </button>
+                            <a asp-action="Delete" asp-route-id="@Model.IdLibro" class="btn btn-outline-danger btn-lg shadow-sm">
+                                <i class="bi bi-trash me-1"></i> Eliminar Libro del Catálogo
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>

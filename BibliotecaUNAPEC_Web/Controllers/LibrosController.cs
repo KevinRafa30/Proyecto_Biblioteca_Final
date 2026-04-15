@@ -139,7 +139,7 @@ namespace BibliotecaUNAPEC_Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si hay un error , recargar las listas para que la vista no falle y mostrar los errores
+            // Si hay un error, recargar las listas para que la vista no falle y mostrar los errores
             ViewData["IdAutor"] = new SelectList(_context.Autores, "IdAutor", "Nombre", libro.IdAutor);
             ViewData["IdEditorial"] = new SelectList(_context.Editoriales, "IdEditorial", "Nombre", libro.IdEditorial);
             ViewData["IdCiencia"] = new SelectList(_context.Ciencias, "IdCiencia", "Descripcion", libro.IdCiencia);
@@ -211,6 +211,73 @@ namespace BibliotecaUNAPEC_Web.Controllers
             ViewData["IdTipoBibliografia"] = new SelectList(_context.TiposBibliografia, "IdTipoBibliografia", "Descripcion", libro.IdTipoBibliografia);
 
             return View(libro);
+        }
+
+        // GET REQUEST: Libros/Delete/5
+        // Prepara la confirmación de eliminación cargando los datos y validando si el libro está prestado
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Cargamos el libro con sus relaciones para mostrar toda la info en la vista de confirmación
+            var libro = await _context.Libros
+                .Include(l => l.IdAutorNavigation)
+                .Include(l => l.IdEditorialNavigation)
+                .Include(l => l.IdCienciaNavigation)
+                .Include(l => l.IdIdiomaNavigation)
+                .Include(l => l.IdTipoBibliografiaNavigation)
+                .FirstOrDefaultAsync(m => m.IdLibro == id);
+
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            // Si el libro está prestado (Estado = false), pasamos una alerta a la vista
+            if (libro.Estado == false)
+            {
+                ViewBag.MensajeError = "Este libro se encuentra actualmente prestado y no puede ser eliminado.";
+            }
+
+            return View(libro);
+        }
+
+        // POST REQUEST: Libros/Delete/5
+        // Ejecuta la eliminación definitiva tras validar la disponibilidad del libro
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var libro = await _context.Libros.FindAsync(id);
+
+            if (libro == null)
+            {
+                return NotFound();
+            }
+
+            // Bloqueo de seguridad: No permitimos borrar si el libro no ha sido devuelto (Estado = false)
+            if (libro.Estado == false)
+            {
+                TempData["ErrorBorrado"] = "Error: El libro '" + libro.Titulo + "' tiene préstamos pendientes. Debe ser devuelto antes de eliminarlo.";
+                return RedirectToAction(nameof(Delete), new { id = id });
+            }
+
+            try
+            {
+                _context.Libros.Remove(libro);
+                await _context.SaveChangesAsync();
+                TempData["ExitoBorrado"] = "El libro ha sido eliminado del inventario.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                // Captura errores de integridad (si el libro ya tiene historial en préstamos antiguos)
+                TempData["ErrorBorrado"] = "No se puede eliminar el libro por restricciones de integridad (historial existente).";
+                return RedirectToAction(nameof(Delete), new { id = id });
+            }
         }
 
         private bool LibroExists(int id)
