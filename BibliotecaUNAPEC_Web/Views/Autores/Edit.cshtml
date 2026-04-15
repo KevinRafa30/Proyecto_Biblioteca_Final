@@ -49,11 +49,10 @@
                             <div class="form-check form-switch custom-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
                                        name="Estado" id="switchEstado" value="true"
-                                @(Model.Estado == true ? "checked=\"checked\"" : "")>
-                                
-                                @* Input oculto para que el servidor reciba 'false' si el switch está apagado *@
+                                       @(Model.Estado == true ? "checked=\"checked\"" : "")>
+
                                 <input type="hidden" name="Estado" value="false" />
-                                
+
                                 <label class="form-check-label text-muted" for="switchEstado">
                                     Autor activo para nuevas publicaciones
                                 </label>
@@ -64,6 +63,9 @@
                             <button type="submit" class="btn btn-primary btn-lg shadow-sm">
                                 <i class="bi bi-save"></i> Guardar Cambios
                             </button>
+                            <a asp-action="Delete" asp-route-id="@Model.IdAutor" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Eliminar Registro
+                            </a>
                         </div>
                     </form>
                 </div>

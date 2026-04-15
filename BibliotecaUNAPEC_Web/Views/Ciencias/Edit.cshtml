@@ -1,14 +1,14 @@
 ﻿@model BibliotecaUNAPEC_Web.Models.Ciencia
 
 @{
-    ViewData["Title"] = "Editar Ciencia";
+    ViewData["Title"] = "Eliminar Ciencia";
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold text-primary">Editar Ciencia / Área</h2>
+                <h2 class="fw-bold text-danger">Eliminar Ciencia / Área</h2>
                 <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
                     <i class="bi bi-arrow-left"></i> Volver al Listado
                 </a>
@@ -16,40 +16,42 @@
 
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white p-3">
-                    <h5 class="mb-0">Modificar Área del Conocimiento</h5>
+                    <h5 class="mb-0">¿Confirmar eliminación del área?</h5>
                 </div>
                 <div class="card-body p-4">
-                    <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        <input type="hidden" asp-for="IdCiencia" />
+                    <div class="mb-4">
+                        <label class="form-label fw-bold text-muted">Nombre de la Ciencia</label>
+                        <div class="form-control-plaintext border-bottom">@Model.Descripcion</div>
+                    </div>
 
-                        <div class="form-group mb-4">
-                            <label asp-for="Descripcion" class="form-label fw-bold">Nombre de la Ciencia</label>
-                            <input asp-for="Descripcion" class="form-control" placeholder="Ej. Ingeniería, Medicina, Filosofía..." />
-                            <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                    <div class="form-group mb-4">
+                        <label class="form-label fw-bold d-block text-muted">Estado de la Categoría</label>
+                        @if (Model.Estado == true)
+                        {
+                            <span class="badge bg-success py-2 px-3">Activa</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger py-2 px-3">Inactiva</span>
+                        }
+                    </div>
+
+                    <hr class="text-muted" />
+
+                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+                        <div>
+                            <strong>Atención:</strong> Si eliminas esta ciencia, los libros asociados podrían quedar sin categoría.
                         </div>
+                    </div>
 
-                        <div class="form-group mb-4">
-                            <label class="form-label fw-bold d-block">Estado de la Categoría</label>
-                            <div class="form-check form-switch custom-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                       name="Estado" id="switchEstado" value="true"
-                                @(Model.Estado == true ? "checked=\"checked\"" : "")>
-                                
-                                @* Input hidden para asegurar que viaje un 'false' si el switch está apagado *@
-                                <input type="hidden" name="Estado" value="false" />
-                                
-                                <label class="form-check-label text-muted" for="switchEstado">
-                                    Activa para clasificación de libros
-                                </label>
-                            </div>
-                        </div>
-
-                        <hr class="text-muted" />
+                    <form asp-action="Delete">
+                        @* Asegúrate de que el nombre coincida con el parámetro del Controller (id) *@
+                        <input type="hidden" name="id" value="@Model.IdCiencia" />
 
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
-                                <i class="bi bi-save"></i> Guardar Cambios
+                            <button type="submit" class="btn btn-danger btn-lg shadow-sm">
+                                <i class="bi bi-trash"></i> Eliminar Permanentemente
                             </button>
                         </div>
                     </form>
@@ -58,9 +60,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
