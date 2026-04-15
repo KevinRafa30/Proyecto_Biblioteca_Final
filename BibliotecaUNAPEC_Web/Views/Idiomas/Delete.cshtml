@@ -14,6 +14,9 @@
                 </a>
             </div>
 
+            @* 1. RESUMEN DE VALIDACIÓN: Captura el error de dependencia enviado desde el controlador *@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 shadow-sm mb-4 fw-bold"></div>
+
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white p-3">
                     <h5 class="mb-0 small text-uppercase fw-bold">¿Confirmar eliminación del registro?</h5>
@@ -41,7 +44,7 @@
                     <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center mb-4" role="alert">
                         <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
                         <div class="small">
-                            <strong>Advertencia:</strong> Esta acción eliminará permanentemente el idioma. Verifique que no existan libros vinculados para evitar errores de integridad.
+                            <strong>Advertencia:</strong> Esta acción eliminará permanentemente el idioma. Solo podrá completarse si no existen libros vinculados.
                         </div>
                     </div>
 
@@ -53,7 +56,7 @@
                             <button type="submit" class="btn btn-danger btn-lg fw-bold shadow-sm">
                                 <i class="bi bi-trash-fill me-2"></i> CONFIRMAR ELIMINACIÓN
                             </button>
-                            <a asp-action="Edit" asp-route-id="@Model.IdIdioma" class="btn btn-link text-secondary text-decoration-none small">
+                            <a asp-action="Edit" asp-route-id="@Model.IdIdioma" class="btn btn-link text-secondary text-decoration-none small text-center">
                                 Cancelar y volver a edición
                             </a>
                         </div>

@@ -1,10 +1,8 @@
 ﻿using BibliotecaUNAPEC_Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,17 +27,12 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: Idiomas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var idioma = await _context.Idiomas
                 .FirstOrDefaultAsync(m => m.IdIdioma == id);
-            if (idioma == null)
-            {
-                return NotFound();
-            }
+
+            if (idioma == null) return NotFound();
 
             return View(idioma);
         }
@@ -51,8 +44,6 @@ namespace BibliotecaUNAPEC_Web.Controllers
         }
 
         // POST: Idiomas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdIdioma,Descripcion,Estado")] Idioma idioma)
@@ -69,30 +60,20 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: Idiomas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var idioma = await _context.Idiomas.FindAsync(id);
-            if (idioma == null)
-            {
-                return NotFound();
-            }
+            if (idioma == null) return NotFound();
+
             return View(idioma);
         }
 
         // POST: Idiomas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdIdioma,Descripcion,Estado")] Idioma idioma)
         {
-            if (id != idioma.IdIdioma)
-            {
-                return NotFound();
-            }
+            if (id != idioma.IdIdioma) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -103,14 +84,8 @@ namespace BibliotecaUNAPEC_Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!IdiomaExists(idioma.IdIdioma))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!IdiomaExists(idioma.IdIdioma)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -120,34 +95,46 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: Idiomas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var idioma = await _context.Idiomas
                 .FirstOrDefaultAsync(m => m.IdIdioma == id);
-            if (idioma == null)
-            {
-                return NotFound();
-            }
+
+            if (idioma == null) return NotFound();
 
             return View(idioma);
         }
 
-        // POST: Idiomas/Delete/5
+        // POST: Idiomas/Delete/5 - VALIDACIÓN DE DEPENDENCIAS APLICADA
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var idioma = await _context.Idiomas.FindAsync(id);
-            if (idioma != null)
+            // Cargamos el idioma incluyendo la colección de libros asociados
+            var idioma = await _context.Idiomas
+                .Include(i => i.Libros)
+                .FirstOrDefaultAsync(i => i.IdIdioma == id);
+
+            if (idioma == null) return RedirectToAction(nameof(Index));
+
+            // VALIDACIÓN: ¿Hay libros en este idioma?
+            if (idioma.Libros != null && idioma.Libros.Any())
             {
-                _context.Idiomas.Remove(idioma);
+                ModelState.AddModelError("", $"No se puede eliminar el idioma '{idioma.Descripcion}' porque existen {idioma.Libros.Count()} libros registrados en el catálogo con esta configuración. Debe eliminar o cambiar el idioma de esos libros primero.");
+                return View(idioma);
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Idiomas.Remove(idioma);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Ocurrió un error técnico al intentar procesar la eliminación.");
+                return View(idioma);
+            }
         }
 
         private bool IdiomaExists(int id)
