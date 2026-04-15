@@ -20,28 +20,38 @@
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Edit">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        @* RESUMEN DE ERRORES *@
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 shadow-sm mb-3 fw-bold"></div>
+
                         <input type="hidden" asp-for="IdUsuario" />
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label asp-for="Nombre" class="form-label fw-bold">Nombre Completo</label>
-                                    <input asp-for="Nombre" class="form-control" placeholder="Ej. Pedro Martínez" />
+                                    <input asp-for="Nombre" class="form-control" placeholder="Ej. Pedro Martínez" maxlength="100" />
                                     <span asp-validation-for="Nombre" class="text-danger small"></span>
                                 </div>
 
                                 <div class="form-group mb-3">
-                                    <label asp-for="Cedula" class="form-label fw-bold">Cédula</label>
-                                    <input asp-for="Cedula" class="form-control" placeholder="001-0000000-0" />
+                                    <label asp-for="Cedula" class="form-label fw-bold">Cédula (Solo números)</label>
+                                    @* BLOQUEO: Solo números, máx 11 *@
+                                    <input asp-for="Cedula" class="form-control"
+                                           placeholder="Ej. 00100000001"
+                                           maxlength="11"
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
                                     <span asp-validation-for="Cedula" class="text-danger small"></span>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label asp-for="NoCarnet" class="form-label fw-bold">No. de Carnet</label>
-                                    <input asp-for="NoCarnet" class="form-control" placeholder="Ej. 20230045" />
+                                    <label asp-for="NoCarnet" class="form-label fw-bold">No. de Carnet (Solo números)</label>
+                                    @* BLOQUEO NUEVO: Ahora el carnet también limpia letras automáticamente *@
+                                    <input asp-for="NoCarnet" class="form-control"
+                                           placeholder="Ej. 20230045"
+                                           maxlength="20"
+                                           oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
                                     <span asp-validation-for="NoCarnet" class="text-danger small"></span>
                                 </div>
 
@@ -51,8 +61,8 @@
                                         <option value="">Seleccione tipo...</option>
                                         <option value="Estudiante">Estudiante</option>
                                         <option value="Profesor">Profesor</option>
-                                        <option value="Empleado">Empleado</option>
-                                        <option value="Externo">Externo</option>
+                                        <option value="Empleado">Empleado Administrativo</option>
+                                        <option value="Externo">Visitante Externo</option>
                                     </select>
                                     <span asp-validation-for="TipoPersona" class="text-danger small"></span>
                                 </div>
@@ -62,21 +72,17 @@
                         <hr class="my-4 text-muted" />
 
                         <div class="form-group mb-4 text-center">
-                            <label class="form-label fw-bold d-block">Estado de Membresía</label>
-                            <div class="form-check form-switch d-inline-block">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                       name="Estado" id="switchEstado" value="true"
-                                @(Model.Estado == true ? "checked=\"checked\"" : "")>
-                                <input type="hidden" name="Estado" value="false" />
-                                <label class="form-check-label text-muted ms-2" for="switchEstado">
-                                    ¿Usuario habilitado para préstamos?
-                                </label>
-                            </div>
+                            <label asp-for="Estado" class="form-label fw-bold d-block text-muted text-uppercase small">Estatus de Membresía</label>
+                            <select asp-for="Estado" class="form-select w-50 mx-auto rounded-1 border-secondary-subtle">
+                                <option value="true">Activo (Habilitado)</option>
+                                <option value="false">Inactivo (Suspendido)</option>
+                            </select>
+                            <span asp-validation-for="Estado" class="text-danger small"></span>
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
-                                <i class="bi bi-save"></i> Actualizar Usuario
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm fw-bold">
+                                <i class="bi bi-save"></i> Guardar Cambios
                             </button>
                         </div>
                     </form>

@@ -15,31 +15,41 @@
             </div>
 
             <div class="card rounded-1 border shadow-none">
-                <div class="card-header bg-light border-bottom p-3">
-                    <h6 class="mb-0 fw-bold text-dark text-uppercase small">
+                <div class="card-header bg-dark p-3">
+                    <h6 class="mb-0 fw-bold text-white text-uppercase small">
                         <i class="bi bi-person-plus me-2 text-primary"></i>Registro de Afiliado
                     </h6>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create">
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3 small"></div>
+                        @* SEGURO 1: Errores de servidor *@
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 shadow-sm mb-4 fw-bold small"></div>
 
                         <div class="row mb-4">
                             <div class="col-md-12 mb-3">
                                 <label asp-for="Nombre" class="form-label small fw-bold text-muted text-uppercase">Nombre Completo</label>
-                                <input asp-for="Nombre" class="form-control rounded-1 border-secondary-subtle" placeholder="Ej. Juan Pérez" />
+                                <input asp-for="Nombre" class="form-control rounded-1 border-secondary-subtle" placeholder="Ej. Juan Pérez" maxlength="100" />
                                 <span asp-validation-for="Nombre" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Cedula" class="form-label small fw-bold text-muted text-uppercase">Cédula de Identidad</label>
-                                <input asp-for="Cedula" class="form-control rounded-1 border-secondary-subtle font-monospace" placeholder="001-0000000-1" />
+                                <label asp-for="Cedula" class="form-label small fw-bold text-muted text-uppercase">Cédula (Solo números)</label>
+                                @* SEGURO 3: Bloqueo de guiones y letras *@
+                                <input asp-for="Cedula" class="form-control rounded-1 border-secondary-subtle font-monospace"
+                                       placeholder="Ej. 00100000001"
+                                       maxlength="11"
+                                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Exactamente 11 dígitos numéricos.</small>
                                 <span asp-validation-for="Cedula" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label asp-for="NoCarnet" class="form-label small fw-bold text-muted text-uppercase">Número de Carnet / ID</label>
-                                <input asp-for="NoCarnet" class="form-control rounded-1 border-secondary-subtle font-monospace" placeholder="2026-0001" />
+                                <label asp-for="NoCarnet" class="form-label small fw-bold text-muted text-uppercase">Número de Carnet (Solo números)</label>
+                                @* SEGURO 6 (NUEVO): Ahora el Carnet también bloquea letras físicamente *@
+                                <input asp-for="NoCarnet" class="form-control rounded-1 border-secondary-subtle font-monospace"
+                                       placeholder="Solo dígitos"
+                                       maxlength="20"
+                                       oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
                                 <span asp-validation-for="NoCarnet" class="text-danger small"></span>
                             </div>
                         </div>
@@ -53,8 +63,8 @@
                                     <option value="">-- Seleccionar categoría --</option>
                                     <option value="Estudiante">Estudiante</option>
                                     <option value="Profesor">Profesor</option>
-                                    <option value="Empleado Administrativo">Empleado Administrativo</option>
-                                    <option value="Visitante Externo">Visitante Externo</option>
+                                    <option value="Empleado">Empleado Administrativo</option>
+                                    <option value="Externo">Visitante Externo</option>
                                 </select>
                                 <span asp-validation-for="TipoPersona" class="text-danger small"></span>
                             </div>
@@ -70,19 +80,12 @@
                         </div>
 
                         <div class="text-end pt-3 border-top">
-                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-1 fw-bold border-0">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-1 fw-bold border-0 shadow-sm">
                                 <i class="bi bi-save2 me-1"></i> Guardar Usuario
                             </button>
                         </div>
                     </form>
                 </div>
-            </div>
-
-            <div class="mt-3 text-center">
-                <p class="text-muted small">
-                    <i class="bi bi-shield-check me-1"></i>
-                    Los datos ingresados deben coincidir con el carnet institucional de UNAPEC.
-                </p>
             </div>
         </div>
     </div>
