@@ -1,10 +1,8 @@
 ﻿using BibliotecaUNAPEC_Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,17 +27,12 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: Ciencias/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var ciencia = await _context.Ciencias
                 .FirstOrDefaultAsync(m => m.IdCiencia == id);
-            if (ciencia == null)
-            {
-                return NotFound();
-            }
+
+            if (ciencia == null) return NotFound();
 
             return View(ciencia);
         }
@@ -51,8 +44,6 @@ namespace BibliotecaUNAPEC_Web.Controllers
         }
 
         // POST: Ciencias/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdCiencia,Descripcion,Estado")] Ciencia ciencia)
@@ -69,30 +60,20 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: Ciencias/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var ciencia = await _context.Ciencias.FindAsync(id);
-            if (ciencia == null)
-            {
-                return NotFound();
-            }
+            if (ciencia == null) return NotFound();
+
             return View(ciencia);
         }
 
         // POST: Ciencias/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdCiencia,Descripcion,Estado")] Ciencia ciencia)
         {
-            if (id != ciencia.IdCiencia)
-            {
-                return NotFound();
-            }
+            if (id != ciencia.IdCiencia) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -103,14 +84,8 @@ namespace BibliotecaUNAPEC_Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CienciaExists(ciencia.IdCiencia))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!CienciaExists(ciencia.IdCiencia)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -120,34 +95,46 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: Ciencias/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var ciencia = await _context.Ciencias
                 .FirstOrDefaultAsync(m => m.IdCiencia == id);
-            if (ciencia == null)
-            {
-                return NotFound();
-            }
+
+            if (ciencia == null) return NotFound();
 
             return View(ciencia);
         }
 
-        // POST: Ciencias/Delete/5
+        // POST: Ciencias/Delete/5 - LOGICA DE VALIDACIÓN APLICADA
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ciencia = await _context.Ciencias.FindAsync(id);
-            if (ciencia != null)
+            // Cargamos la ciencia incluyendo sus libros asociados
+            var ciencia = await _context.Ciencias
+                .Include(c => c.Libros)
+                .FirstOrDefaultAsync(c => c.IdCiencia == id);
+
+            if (ciencia == null) return RedirectToAction(nameof(Index));
+
+            // VALIDACIÓN: Verificar dependencias en la tabla Libros
+            if (ciencia.Libros != null && ciencia.Libros.Any())
             {
-                _context.Ciencias.Remove(ciencia);
+                ModelState.AddModelError("", $"No se puede eliminar el área '{ciencia.Descripcion}' porque existen {ciencia.Libros.Count()} libros registrados bajo esta categoría. Debe reasignar o eliminar los libros primero.");
+                return View(ciencia);
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.Ciencias.Remove(ciencia);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Error técnico al intentar eliminar el registro.");
+                return View(ciencia);
+            }
         }
 
         private bool CienciaExists(int id)
