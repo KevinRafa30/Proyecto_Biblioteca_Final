@@ -21,7 +21,7 @@
                 <div class="card-body p-4">
                     <form asp-action="Edit">
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                        
+
                         <input type="hidden" asp-for="IdTipoBibliografia" />
 
                         <div class="form-group mb-4">
@@ -33,16 +33,16 @@
                         <div class="form-group mb-4">
                             <label class="form-label fw-bold d-block">Estado del Registro</label>
                             <div class="form-check form-switch custom-switch">
-                                @* IMPORTANTE: No usamos asp-for aquí para evitar el error de Nullable.
-                                   Usamos el atributo 'checked' basado en el valor booleano manual.
+                                @* IMPORTANTE: Mantenemos el manejo manual del checkbox para evitar 
+                                    problemas con tipos Nullable y asegurar el envío de valores.
                                 *@
                                 <input class="form-check-input" type="checkbox" role="switch"
                                        name="Estado" id="switchEstado" value="true"
-                                @(Model.Estado == true ? "checked=\"checked\"" : "")>
-                                
-                                @* Campo oculto obligatorio para que ASP.NET reciba 'false' si no se marca *@
+                                       @(Model.Estado == true ? "checked=\"checked\"" : "")>
+
+                                @* Campo oculto para asegurar que viaje 'false' si el switch está apagado *@
                                 <input type="hidden" name="Estado" value="false" />
-                                
+
                                 <label class="form-check-label text-muted" for="switchEstado">
                                     Activo / Disponible para el catálogo
                                 </label>
@@ -55,6 +55,13 @@
                             <button type="submit" class="btn btn-primary btn-lg shadow-sm">
                                 <i class="bi bi-save"></i> Guardar Cambios
                             </button>
+
+                            @* EXCEPCIÓN: Botón de eliminación rápida.
+                                Redirige a la vista Delete para validar la integridad referencial.
+                            *@
+                            <a asp-action="Delete" asp-route-id="@Model.IdTipoBibliografia" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Eliminar Formato
+                            </a>
                         </div>
                     </form>
                 </div>

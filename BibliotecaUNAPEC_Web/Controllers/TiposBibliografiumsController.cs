@@ -29,17 +29,12 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: TiposBibliografiums/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var tiposBibliografium = await _context.TiposBibliografia
                 .FirstOrDefaultAsync(m => m.IdTipoBibliografia == id);
-            if (tiposBibliografium == null)
-            {
-                return NotFound();
-            }
+
+            if (tiposBibliografium == null) return NotFound();
 
             return View(tiposBibliografium);
         }
@@ -51,8 +46,6 @@ namespace BibliotecaUNAPEC_Web.Controllers
         }
 
         // POST: TiposBibliografiums/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdTipoBibliografia,Descripcion,Estado")] TiposBibliografium tiposBibliografium)
@@ -69,30 +62,20 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: TiposBibliografiums/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var tiposBibliografium = await _context.TiposBibliografia.FindAsync(id);
-            if (tiposBibliografium == null)
-            {
-                return NotFound();
-            }
+            if (tiposBibliografium == null) return NotFound();
+
             return View(tiposBibliografium);
         }
 
         // POST: TiposBibliografiums/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdTipoBibliografia,Descripcion,Estado")] TiposBibliografium tiposBibliografium)
         {
-            if (id != tiposBibliografium.IdTipoBibliografia)
-            {
-                return NotFound();
-            }
+            if (id != tiposBibliografium.IdTipoBibliografia) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -103,14 +86,8 @@ namespace BibliotecaUNAPEC_Web.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TiposBibliografiumExists(tiposBibliografium.IdTipoBibliografia))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!TiposBibliografiumExists(tiposBibliografium.IdTipoBibliografia)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -120,16 +97,20 @@ namespace BibliotecaUNAPEC_Web.Controllers
         // GET: TiposBibliografiums/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var tiposBibliografium = await _context.TiposBibliografia
                 .FirstOrDefaultAsync(m => m.IdTipoBibliografia == id);
-            if (tiposBibliografium == null)
+
+            if (tiposBibliografium == null) return NotFound();
+
+            // Verificamos dependencias para informar preventivamente en la vista
+            int cantidadLibros = await _context.Libros.CountAsync(l => l.IdTipoBibliografia == id);
+
+            if (cantidadLibros > 0)
             {
-                return NotFound();
+                ViewBag.MensajeBloqueo = $"No se puede eliminar: existen {cantidadLibros} libros asociados a este formato.";
+                ViewBag.Bloqueado = true;
             }
 
             return View(tiposBibliografium);
@@ -141,13 +122,38 @@ namespace BibliotecaUNAPEC_Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var tiposBibliografium = await _context.TiposBibliografia.FindAsync(id);
-            if (tiposBibliografium != null)
+
+            if (tiposBibliografium == null) return NotFound();
+
+            // LÓGICA DE PROTECCIÓN:
+            // Verificamos si tiene libros vinculados
+            bool tieneLibros = await _context.Libros.AnyAsync(l => l.IdTipoBibliografia == id);
+
+            if (tieneLibros)
             {
-                _context.TiposBibliografia.Remove(tiposBibliografium);
+                // Agregamos el error al ModelState para que aparezca en el asp-validation-summary
+                ModelState.AddModelError(string.Empty, "Atención: No es posible eliminar este formato porque tiene libros vinculados en el catálogo.");
+
+                // Recargamos los ViewBags necesarios para la vista de vuelta
+                int cantidad = await _context.Libros.CountAsync(l => l.IdTipoBibliografia == id);
+                ViewBag.MensajeBloqueo = $"No se puede eliminar: existen {cantidad} libros asociados a este formato.";
+                ViewBag.Bloqueado = true;
+
+                // DEVOLVEMOS LA VISTA (No Redirect) para que el mensaje de error persista
+                return View(tiposBibliografium);
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                _context.TiposBibliografia.Remove(tiposBibliografium);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Ocurrió un error inesperado al intentar eliminar el registro.");
+                return View(tiposBibliografium);
+            }
         }
 
         private bool TiposBibliografiumExists(int id)
