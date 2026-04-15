@@ -3,74 +3,187 @@
     ViewData["Title"] = "Inicio";
 }
 
-<div class="container mt-5">
-    <div class="border rounded-3 shadow-sm bg-white p-5">
-        <h1 class="text-primary fw-bold mb-4">Sistema de Gestión Bibliotecaria UNAPEC</h1>
+<div class="container mt-4 px-4" style="max-width: 850px;">
 
-        @if (!User.Identity.IsAuthenticated)
-        {
-            <div class="row">
-                <div class="col-md-9">
-                    <p class="fs-5 text-dark">
-                        Bienvenido al portal central de la biblioteca. Este sistema permite la administración eficiente del catálogo bibliográfico y el control de los procesos de préstamos y devoluciones.
-                    </p>
-                    <p class="text-secondary">
-                        Inicie sesión para acceder a las funcionalidades correspondientes a su nivel de acceso.
-                    </p>
-                    <div class="mt-4">
-                        <a class="btn btn-primary px-4 shadow-none" href="/Identity/Account/Login">Iniciar Sesión</a>
-                    </div>
-                </div>
-            </div>
-        }
-        else
-        {
-            <p class="fs-5 text-dark mb-4">
-                Sesión iniciada. A continuación, se detallan las funcionalidades y módulos a los que tiene acceso según su perfil:
-            </p>
-
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="card h-100 border shadow-none">
-                        <div class="card-header bg-light border-bottom fw-bold text-dark">
-                            Servicios de Biblioteca y Catálogo
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text text-secondary mb-3">Funcionalidades operativas disponibles:</p>
-                            <ul class="text-dark">
-                                <li>Consultar el catálogo general de libros, revistas, tesis y otros materiales.</li>
-                                <li>Verificar la disponibilidad del inventario bibliográfico en tiempo real.</li>
-                                <li>Procesar operaciones de consulta vinculadas a los recursos físicos de la institución.</li>
-                            </ul>
-                            <a class="btn btn-sm btn-outline-primary mt-3" asp-controller="Libros" asp-action="Index">Acceder al Catálogo</a>
-                        </div>
-                    </div>
-                </div>
-
-                @if (User.IsInRole("Admin"))
-                {
-                    <div class="col-md-6 mb-4">
-                        <div class="card h-100 border shadow-none">
-                            <div class="card-header bg-light border-bottom fw-bold text-dark">
-                                Administración del Sistema
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text text-secondary mb-3">Nivel de acceso administrativo con control sobre:</p>
-                                <ul class="text-dark">
-                                    <li>Mantenimiento de bases de datos: registro de bibliografía, autores, editoriales, ciencias e idiomas.</li>
-                                    <li>Gestión de registros de personal (Empleados) y usuarios de la biblioteca.</li>
-                                    <li>Auditoría y control de todas las transacciones de préstamos y devoluciones.</li>
-                                </ul>
-                                <a class="btn btn-sm btn-primary mt-3 shadow-none" asp-controller="PrestamosDevoluciones" asp-action="Index">Gestión de Préstamos</a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <div class="mt-3 text-end">
-                <small class="text-muted">Usuario actual: @User.Identity.Name</small>
-            </div>
-        }
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h2 class="fw-bold text-primary mb-0">Sistema de Gestión Bibliotecaria</h2>
+            <p class="text-muted small mb-0">Universidad APEC | Panel de Control</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 fw-bold" style="font-size: 0.7rem;">
+                USUARIO: @User.Identity.Name.ToUpper()
+            </span>
+        </div>
     </div>
+
+    <div class="mt-5 mb-3 px-1">
+        <label class="small fw-bold text-muted text-uppercase mb-0" style="letter-spacing: 1px;">Operaciones Principales</label>
+    </div>
+
+    <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+        <div class="card-body p-4 d-flex justify-content-between align-items-center">
+            <div class="pe-3">
+                <h5 class="fw-bold text-primary mb-1">Catálogo de Libros</h5>
+                <p class="text-muted small mb-0">Administración del inventario bibliográfico y control de existencias.</p>
+            </div>
+            <a asp-controller="Libros" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+        </div>
+    </div>
+
+    <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+        <div class="card-body p-4 d-flex justify-content-between align-items-center">
+            <div class="pe-3">
+                <h5 class="fw-bold text-primary mb-1">Préstamos y Devoluciones</h5>
+                <p class="text-muted small mb-0">Registro de transacciones, control de fechas y seguimiento de usuarios.</p>
+            </div>
+            <a asp-controller="PrestamosDevoluciones" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+        </div>
+    </div>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="mt-5 mb-3 px-1">
+            <label class="small fw-bold text-muted text-uppercase mb-0" style="letter-spacing: 1px;">Mantenimientos de Referencia</label>
+        </div>
+
+        <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="pe-3">
+                    <h5 class="fw-bold text-primary mb-1">Autores</h5>
+                    <p class="text-muted small mb-0">Registro de nombres y nacionalidades de los creadores.</p>
+                </div>
+                <a asp-controller="Autores" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+            </div>
+        </div>
+
+        <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="pe-3">
+                    <h5 class="fw-bold text-primary mb-1">Editoriales</h5>
+                    <p class="text-muted small mb-0">Gestión de casas editoras y distribuidoras de material.</p>
+                </div>
+                <a asp-controller="Editoriales" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+            </div>
+        </div>
+
+        <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="pe-3">
+                    <h5 class="fw-bold text-primary mb-1">Ciencias y Áreas</h5>
+                    <p class="text-muted small mb-0">Clasificación técnica de los libros por área del conocimiento.</p>
+                </div>
+                <a asp-controller="Ciencias" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+            </div>
+        </div>
+
+        <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="pe-3">
+                    <h5 class="fw-bold text-primary mb-1">Idiomas</h5>
+                    <p class="text-muted small mb-0">Administración de los lenguajes disponibles en el fondo.</p>
+                </div>
+                <a asp-controller="Idiomas" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+            </div>
+        </div>
+
+        <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="pe-3">
+                    <h5 class="fw-bold text-primary mb-1">Tipos de Bibliografía</h5>
+                    <p class="text-muted small mb-0">Definición de formatos como Libros, Revistas o Tesis.</p>
+                </div>
+                <a asp-controller="TiposBibliografiums" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+            </div>
+        </div>
+
+        <div class="mt-5 mb-3 px-1">
+            <label class="small fw-bold text-muted text-uppercase mb-0" style="letter-spacing: 1px;">Gestión de Personal y Usuarios</label>
+        </div>
+
+        <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="pe-3">
+                    <h5 class="fw-bold text-primary mb-1">Usuarios (Lectores)</h5>
+                    <p class="text-muted small mb-0">Administración de estudiantes y socios externos.</p>
+                </div>
+                <a asp-controller="Usuarios" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+            </div>
+        </div>
+
+        <div class="card border shadow-sm mb-3 rounded-2 bg-white">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="pe-3">
+                    <h5 class="fw-bold text-primary mb-1">Empleados</h5>
+                    <p class="text-muted small mb-0">Registro del personal administrativo con acceso al sistema.</p>
+                </div>
+                <a asp-controller="Empleados" asp-action="Index" class="btn btn-dark rounded-1 fw-bold px-4 shadow-none">Ir</a>
+            </div>
+        </div>
+
+        <div class="mt-5 mb-3 px-1">
+            <label class="small fw-bold text-muted text-uppercase mb-0" style="letter-spacing: 1px;">Salida de Información</label>
+        </div>
+
+        <div class="card border shadow-sm mb-5 rounded-2 bg-light">
+            <div class="card-body p-4 d-flex justify-content-between align-items-center">
+                <div class="pe-3">
+                    <h5 class="fw-bold text-primary mb-1">Reportes y Auditoría</h5>
+                    <p class="text-secondary small mb-0">Generación de inventario oficial y consulta de datos externos.</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <a asp-controller="Libros" asp-action="ImprimirReporte" class="btn btn-dark rounded-1 fw-bold px-3 btn-sm text-nowrap">Generar PDF</a>
+                    <a asp-controller="Libros" asp-action="ConsultaApi" class="btn btn-outline-dark bg-white rounded-1 fw-bold px-3 btn-sm text-nowrap">Consulta API</a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <footer class="mt-5 py-4 border-top text-center text-muted small">
+        <p class="mb-0">Universidad APEC - Portal Administrativo 2026</p>
+    </footer>
 </div>
+
+<style>
+    body {
+        background-color: #fcfcfc !important;
+    }
+
+    .text-primary {
+        color: #003366 !important;
+    }
+
+    .btn-dark {
+        background-color: #212529 !important;
+        border: none !important;
+    }
+
+    .rounded-1 {
+        border-radius: 4px !important;
+    }
+
+    .rounded-2 {
+        border-radius: 6px !important;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 .125rem .25rem rgba(0,0,0,.04) !important;
+    }
+
+    .bg-primary-subtle {
+        background-color: #e7f0f7 !important;
+    }
+
+    .border-primary-subtle {
+        border-color: #003366 !important;
+        border-opacity: 0.2;
+    }
+
+    .btn {
+        transition: none;
+    }
+
+    p {
+        line-height: 1.4;
+    }
+</style>
