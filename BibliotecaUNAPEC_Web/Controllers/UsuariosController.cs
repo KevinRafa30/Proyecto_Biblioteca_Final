@@ -126,6 +126,28 @@ namespace BibliotecaUNAPEC_Web.Controllers
             return View(usuario);
         }
 
+        // GET: Usuarios/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Usamos .Include para traer sus préstamos y ver qué libros tiene
+            var usuario = await _context.Usuarios
+                .Include(u => u.PrestamosDevoluciones)
+                    .ThenInclude(p => p.IdLibroNavigation)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.IdUsuario == id);
+
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return View(usuario);
+        }
         // POST: Usuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
