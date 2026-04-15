@@ -51,8 +51,6 @@ namespace BibliotecaUNAPEC_Web.Controllers
         }
 
         // POST: Autores/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("IdAutor,Nombre,Apellido,Nacionalidad,Estado")] Autore autore)
@@ -83,8 +81,6 @@ namespace BibliotecaUNAPEC_Web.Controllers
         }
 
         // POST: Autores/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("IdAutor,Nombre,Apellido,Nacionalidad,Estado")] Autore autore)
@@ -135,19 +131,43 @@ namespace BibliotecaUNAPEC_Web.Controllers
             return View(autore);
         }
 
-        // POST: Autores/Delete/5
+        // POST: Autores/Delete/5 - ACTUALIZADO CON VALIDACIÓN
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var autore = await _context.Autores.FindAsync(id);
-            if (autore != null)
+            // Cargamos el autor incluyendo su colección de libros para validar
+            var autore = await _context.Autores
+                .Include(a => a.Libros)
+                .FirstOrDefaultAsync(a => a.IdAutor == id);
+
+            if (autore == null)
             {
-                _context.Autores.Remove(autore);
+                return RedirectToAction(nameof(Index));
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            // 1. Validar si el autor tiene libros asociados
+            if (autore.Libros != null && autore.Libros.Any())
+            {
+                // Agregamos el error para que se muestre en el Validation Summary de la vista
+                ModelState.AddModelError("", $"No se puede eliminar a '{autore.Nombre} {autore.Apellido}' porque tiene {autore.Libros.Count()} libro(s) asociados en el catálogo. Debe eliminar o reasignar los libros primero.");
+
+                // Retornamos a la vista de confirmación con el mensaje de error
+                return View(autore);
+            }
+
+            // 2. Si no tiene libros, procedemos con el borrado
+            try
+            {
+                _context.Autores.Remove(autore);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("", "Ocurrió un error al intentar eliminar el registro de la base de datos.");
+                return View(autore);
+            }
         }
 
         private bool AutoreExists(int id)

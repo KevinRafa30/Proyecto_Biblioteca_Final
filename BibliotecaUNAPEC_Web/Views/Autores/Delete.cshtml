@@ -14,6 +14,9 @@
                 </a>
             </div>
 
+            @* 1. RESUMEN DE VALIDACIÓN: Aquí aparecerá el error enviado desde el Controlador *@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 shadow-sm mb-4 fw-bold"></div>
+
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white p-3">
                     <h5 class="mb-0">¿Está seguro de que desea eliminar este autor?</h5>
@@ -49,10 +52,10 @@
 
                     <hr class="text-muted" />
 
-                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center" role="alert">
+                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center mb-4" role="alert">
                         <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
                         <div>
-                            <strong>Atención:</strong> Esta acción eliminará permanentemente los datos del autor y no se puede deshacer.
+                            <strong>Atención:</strong> Esta acción eliminará permanentemente los datos del autor. No se puede deshacer si no existen dependencias.
                         </div>
                     </div>
 
@@ -62,8 +65,12 @@
 
                         <div class="d-grid gap-2 mt-4">
                             <button type="submit" class="btn btn-danger btn-lg shadow-sm">
-                                <i class="bi bi-trash"></i> Confirmar Eliminación
+                                <i class="bi bi-trash"></i> Confirmar Eliminación Permanente
                             </button>
+                            @* 2. BOTÓN DE CANCELAR: Para mejorar la navegación *@
+                            <a asp-action="Edit" asp-route-id="@Model.IdAutor" class="btn btn-link text-secondary text-decoration-none small text-center">
+                                Cancelar y volver a edición
+                            </a>
                         </div>
                     </form>
                 </div>

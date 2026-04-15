@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="fw-bold text-primary">Editar Idioma</h2>
+                <h2 class="fw-bold text-primary mb-0">Editar Idioma</h2>
                 <a asp-action="Index" class="btn btn-outline-secondary shadow-sm">
                     <i class="bi bi-arrow-left"></i> Volver al Listado
                 </a>
@@ -16,7 +16,7 @@
 
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white p-3">
-                    <h5 class="mb-0">Modificar Registro</h5>
+                    <h5 class="mb-0 small text-uppercase fw-bold">Modificar Registro</h5>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Edit">
@@ -24,33 +24,37 @@
                         <input type="hidden" asp-for="IdIdioma" />
 
                         <div class="form-group mb-4">
-                            <label asp-for="Descripcion" class="form-label fw-bold">Nombre del Idioma</label>
+                            <label asp-for="Descripcion" class="form-label fw-bold small text-muted text-uppercase">Nombre del Idioma</label>
                             <input asp-for="Descripcion" class="form-control" placeholder="Ej. Español, Inglés, Francés..." />
                             <span asp-validation-for="Descripcion" class="text-danger small"></span>
                         </div>
 
+                        <hr class="text-muted" />
+
                         <div class="form-group mb-4">
-                            <label class="form-label fw-bold d-block">Estado</label>
+                            <label class="form-label fw-bold small text-muted text-uppercase d-block">Estado del Idioma</label>
                             <div class="form-check form-switch custom-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
                                        name="Estado" id="switchEstado" value="true"
-                                @(Model.Estado == true ? "checked=\"checked\"" : "")>
-                                
-                                @* Input hidden para asegurar que viaje un 'false' si el switch está apagado *@
+                                       @(Model.Estado == true ? "checked=\"checked\"" : "")>
+
+                                @* Campo oculto para asegurar el envío de 'false' *@
                                 <input type="hidden" name="Estado" value="false" />
-                                
+
                                 <label class="form-check-label text-muted" for="switchEstado">
                                     Idioma disponible para clasificación de libros
                                 </label>
                             </div>
                         </div>
 
-                        <hr class="text-muted" />
-
+                        @* Acciones siguiendo el modelo de Autores: Una sobre otra *@
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm fw-bold">
                                 <i class="bi bi-save"></i> Guardar Cambios
                             </button>
+                            <a asp-action="Delete" asp-route-id="@Model.IdIdioma" class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Eliminar Registro
+                            </a>
                         </div>
                     </form>
                 </div>
