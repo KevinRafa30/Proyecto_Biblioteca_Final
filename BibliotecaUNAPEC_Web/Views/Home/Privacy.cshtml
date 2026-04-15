@@ -1,6 +1,68 @@
 ﻿@{
-    ViewData["Title"] = "Politica de Privacidad";
+    ViewData["Title"] = "Política de Privacidad";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="border-bottom pb-3 mb-4">
+                <h1 class="fw-bold text-primary"><i class="bi bi-shield-check me-2"></i>@ViewData["Title"]</h1>
+                <p class="text-muted">Sistema de Gestión Bibliotecaria - Universidad UNAPEC</p>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-3 p-4 bg-light">
+                <section class="mb-5">
+                    <h4 class="fw-bold text-dark text-uppercase small" style="letter-spacing: 1px;">1. Recolección de Información</h4>
+                    <p>
+                        Para el correcto funcionamiento del sistema y la gestión de préstamos, el software recopila datos de identificación personal, incluyendo pero no limitado a:
+                    </p>
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-dot text-primary"></i> Nombre completo y apellidos.</li>
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-dot text-primary"></i> Número de carné estudiantil o administrativo.</li>
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-dot text-primary"></i> Correo electrónico institucional.</li>
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-dot text-primary"></i> Historial de préstamos y devoluciones de recursos.</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h4 class="fw-bold text-dark text-uppercase small" style="letter-spacing: 1px;">2. Uso de los Datos</h4>
+                    <p>
+                        La información recolectada se utiliza exclusivamente para:
+                    </p>
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-check2-circle text-success me-2"></i> Administrar el inventario bibliográfico y la disponibilidad de libros.</li>
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-check2-circle text-success me-2"></i> Generar reportes de auditoría y gestión de recursos (Rotativa PDF).</li>
+                        <li class="list-group-item bg-transparent border-0"><i class="bi bi-check2-circle text-success me-2"></i> Controlar el acceso al sistema mediante roles (Administrador, Empleado, Lector).</li>
+                    </ul>
+                </section>
+
+                <section class="mb-5">
+                    <h4 class="fw-bold text-dark text-uppercase small" style="letter-spacing: 1px;">3. Seguridad y Almacenamiento</h4>
+                    <p>
+                        Los datos se almacenan en una base de datos segura (SQL Server) protegida por el sistema de autenticación de **ASP.NET Core Identity**. Solo el personal autorizado con el rol de **Administrador** tiene acceso completo a la gestión de usuarios y registros sensibles.
+                    </p>
+                </section>
+
+                <section class="mb-5">
+                    <h4 class="fw-bold text-dark text-uppercase small" style="letter-spacing: 1px;">4. Protección de Datos (Ley 172-13)</h4>
+                    <p>
+                        Este sistema se adhiere a las normativas de protección de datos vigentes en la República Dominicana, garantizando que la información no será compartida con terceros ajenos a la institución sin el consentimiento expreso del usuario.
+                    </p>
+                </section>
+
+                <div class="alert alert-info border-0 rounded-1 d-flex align-items-center" role="alert">
+                    <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+                    <div>
+                        Al utilizar este sistema, usted acepta los términos establecidos en esta política para la gestión académica y administrativa de la biblioteca.
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 mb-5">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary fw-bold px-4">
+                    <i class="bi bi-arrow-left me-1"></i> Regresar al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
