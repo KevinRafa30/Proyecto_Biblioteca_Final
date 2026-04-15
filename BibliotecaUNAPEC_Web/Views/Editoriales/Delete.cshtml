@@ -14,23 +14,26 @@
                 </a>
             </div>
 
+            @* 1. RESUMEN DE VALIDACIÓN: Aquí aparecerá el error si hay libros vinculados *@
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger border-0 shadow-sm mb-4 fw-bold"></div>
+
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-dark text-white p-3">
                     <h5 class="mb-0">¿Confirmar eliminación de la editorial?</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="mb-3">
-                        <label class="form-label fw-bold text-muted">Nombre de la Editorial</label>
+                        <label class="form-label fw-bold text-muted small text-uppercase">Nombre de la Editorial</label>
                         <div class="form-control-plaintext border-bottom">@Model.Nombre</div>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label fw-bold text-muted">País de Origen</label>
+                        <label class="form-label fw-bold text-muted small text-uppercase">País de Origen</label>
                         <div class="form-control-plaintext border-bottom">@Model.Pais</div>
                     </div>
 
                     <div class="form-group mb-4">
-                        <label class="form-label fw-bold d-block text-muted">Estado de Operación</label>
+                        <label class="form-label fw-bold d-block text-muted small text-uppercase">Estado de Operación</label>
                         @if (Model.Estado == true)
                         {
                             <span class="badge bg-success py-2 px-3">Activa</span>
@@ -43,21 +46,25 @@
 
                     <hr class="text-muted" />
 
-                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center" role="alert">
+                    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center mb-4" role="alert">
                         <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
                         <div>
-                            <strong>Atención:</strong> Esta acción eliminará permanentemente la editorial de la base de datos. Verifique que no existan registros dependientes.
+                            <strong>Atención:</strong> Esta acción eliminará permanentemente la editorial. Solo se podrá completar si no existen libros dependientes.
                         </div>
                     </div>
 
                     <form asp-action="Delete">
-                        @* Pasamos el ID con el nombre 'id' para que el Controller lo reciba correctamente *@
+                        @* Pasamos el ID con el nombre 'id' para el controlador *@
                         <input type="hidden" name="id" value="@Model.IdEditorial" />
 
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-danger btn-lg shadow-sm">
+                            <button type="submit" class="btn btn-danger btn-lg shadow-sm fw-bold">
                                 <i class="bi bi-trash"></i> Confirmar Eliminación
                             </button>
+                            @* 2. BOTÓN DE CANCELAR: Para no dejar al usuario atrapado *@
+                            <a asp-action="Edit" asp-route-id="@Model.IdEditorial" class="btn btn-link text-secondary text-decoration-none small text-center">
+                                Cancelar y volver a edición
+                            </a>
                         </div>
                     </form>
                 </div>
